@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sunglasses Inventory</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </head>
+  <body>
+    <main class="dashboard-shell">
+      <aside class="sidebar">
+        <div class="brand-block">
+          <img src="./assets/sunglasses-cover.png" alt="Sunglasses display" />
+          <div>
+            <p class="eyebrow">Inventory</p>
+            <h1>Sunglasses</h1>
+          </div>
+        </div>
+
+        <section class="history-card">
+          <div>
+            <p class="eyebrow">Log</p>
+            <h2>Recent history</h2>
+          </div>
+          <div id="historyList" class="history-list"></div>
+        </section>
+      </aside>
+
+      <section class="main-workspace">
+        <header class="topbar">
+          <div>
+            <h2>Sunglasses inventory</h2>
+          </div>
+          <label class="search-box">
+            <span>Search</span>
+            <input id="searchInput" type="search" placeholder="Aviator, Round, Sport..." />
+          </label>
+        </header>
+
+        <section class="highlight-grid">
+          <div class="spotlight-card">
+            <div>
+              <p class="eyebrow">Best sellers</p>
+              <h2>Top movers</h2>
+            </div>
+            <div id="bestSellersList" class="best-sellers-list"></div>
+          </div>
+
+          <div class="add-card">
+            <div>
+              <h2>New sunglasses</h2>
+            </div>
+            <form id="addForm" class="add-form">
+              <input id="newName" required placeholder="Style name" />
+              <input id="newColor" required placeholder="Color" />
+              <input id="newSize" required placeholder="Size, like Med" />
+              <input id="newAudience" required placeholder="Mens or Womens" />
+              <input id="newQuantity" required min="0" type="number" placeholder="Qty" />
+              <input id="newImageUrl" type="url" placeholder="Image URL optional" />
+              <button type="submit">Add</button>
+            </form>
+          </div>
+        </section>
+
+        <section class="inventory-section">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Stock list</p>
+              <h2>Current sunglasses</h2>
+            </div>
+          </div>
+          <div id="inventoryList" class="inventory-list"></div>
+        </section>
+
+        <section class="connect-card">
+          <h2>Supabase status</h2>
+          <p id="connectionStatus">Connecting to Supabase...</p>
+        </section>
+      </section>
+    </main>
+
+    <template id="inventoryTemplate">
+      <article class="inventory-item">
+        <div class="image-wrap">
+          <img class="item-image" alt="" />
+        </div>
+        <div class="item-main">
+          <h3></h3>
+          <dl class="item-details">
+            <div>
+              <dt>Stock left</dt>
+              <dd><strong class="quantity"></strong></dd>
+            </div>
+            <div>
+              <dt>Color</dt>
+              <dd class="color"></dd>
+            </div>
+            <div>
+              <dt>Size</dt>
+              <dd class="size"></dd>
+            </div>
+            <div>
+              <dt>Type</dt>
+              <dd class="audience"></dd>
+            </div>
+            <div>
+              <dt>Total sold</dt>
+              <dd class="total-sold"></dd>
+            </div>
+            <div>
+              <dt>Popularity</dt>
+              <dd class="popularity"></dd>
+            </div>
+          </dl>
+        </div>
+        <div class="restock-controls" aria-label="Restock buttons">
+          <button type="button" data-action="restock" data-amount="1">+1</button>
+          <button type="button" data-action="restock" data-amount="5">+5</button>
+          <button type="button" data-action="restock" data-amount="10">+10</button>
+          <button type="button" data-action="restock" data-amount="100">+100</button>
+        </div>
+        <button type="button" class="danger sold-button" data-action="sold" data-amount="1">-1 sold</button>
+      </article>
+    </template>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
