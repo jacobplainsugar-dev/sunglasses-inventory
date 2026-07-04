@@ -34,14 +34,6 @@
             <h1>Sunglasses</h1>
           </div>
         </div>
-
-        <section class="history-card">
-          <div>
-            <p class="eyebrow">Log</p>
-            <h2>Recent history</h2>
-          </div>
-          <div id="historyList" class="history-list"></div>
-        </section>
       </aside>
 
       <section class="main-workspace">
@@ -89,27 +81,6 @@
             </div>
           </div>
           <div id="inventoryList" class="inventory-list"></div>
-        </section>
-
-        <section class="sales-history-card">
-          <div class="section-title">
-            <div>
-              <p class="eyebrow">Sold history</p>
-              <h2>Sales table</h2>
-            </div>
-          </div>
-          <div class="sales-table-wrap">
-            <table class="sales-table">
-              <thead>
-                <tr>
-                  <th>Pair</th>
-                  <th>Qty</th>
-                  <th>Date</th>
-                </tr>
-              </thead>
-              <tbody id="salesHistoryBody"></tbody>
-            </table>
-          </div>
         </section>
 
         <section class="connect-card">
@@ -160,6 +131,7 @@
           <button type="button" data-action="restock" data-amount="100">+100</button>
         </div>
         <button type="button" class="danger sold-button" data-action="sold" data-amount="1">-1 sold</button>
+        <button type="button" class="delete-button" data-action="delete">Delete</button>
       </article>
     </template>
 

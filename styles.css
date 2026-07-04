@@ -380,7 +380,8 @@ h2 {
 }
 
 .restock-controls button,
-.sold-button {
+.sold-button,
+.delete-button {
   padding: 0.7rem 0.35rem;
 }
 
@@ -401,7 +402,17 @@ h2 {
 }
 
 .sold-button {
+  margin: 0 14px;
+}
+
+.delete-button {
   margin: 0 14px 14px;
+  background: #ffe6a7;
+  color: #6b4a00;
+}
+
+.delete-button:hover {
+  background: #ffd66b;
 }
 
 .sales-table-wrap {

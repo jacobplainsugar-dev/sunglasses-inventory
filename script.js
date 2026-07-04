@@ -397,6 +397,31 @@ async function changeStock(type, sunglassesId, quantity) {
   renderBestSellers();
 }
 
+async function deleteSunglasses(sunglassesId) {
+  const item = sunglasses.find((entry) => entry.id === sunglassesId);
+  if (!item) return;
+
+  const shouldDelete = window.confirm(`Delete ${item.name}?`);
+  if (!shouldDelete) return;
+
+  if (connected) {
+    const { error } = await client
+      .from("sunglasses")
+      .delete()
+      .eq("id", item.id);
+
+    if (error) {
+      elements.connectionStatus.textContent = `Delete failed: ${error.message}`;
+      return;
+    }
+  }
+
+  sunglasses = sunglasses.filter((entry) => entry.id !== sunglassesId);
+  elements.connectionStatus.textContent = `${item.name} was deleted.`;
+  renderInventory();
+  renderBestSellers();
+}
+
 async function addSunglasses(event) {
   event.preventDefault();
 
@@ -447,6 +472,11 @@ elements.searchInput.addEventListener("input", (event) => {
 elements.inventoryList.addEventListener("click", (event) => {
   const button = event.target.closest("button[data-action]");
   if (!button) return;
+
+  if (button.dataset.action === "delete") {
+    deleteSunglasses(button.dataset.id);
+    return;
+  }
 
   changeStock(button.dataset.action, button.dataset.id, Number(button.dataset.amount));
 });
