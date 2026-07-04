@@ -34,6 +34,8 @@ body {
     radial-gradient(circle at 55% 105%, #c9f2da 0, transparent 30%),
     radial-gradient(circle at 8% 72%, rgba(255, 240, 168, 0.75) 0, transparent 20%),
     radial-gradient(circle at 92% 64%, rgba(234, 220, 255, 0.75) 0, transparent 22%),
+    radial-gradient(circle at 35% 35%, rgba(255, 216, 232, 0.48) 0, transparent 18%),
+    radial-gradient(circle at 68% 42%, rgba(223, 241, 255, 0.7) 0, transparent 16%),
     var(--bg);
   color: var(--ink);
   font-family: Arial, Helvetica, sans-serif;
@@ -50,14 +52,14 @@ body::after {
 }
 
 body::before {
-  content: "✿ ❀ ☺";
+  content: "✿ ❀ ☺ ✦ ✿ ☺ ◉-◉";
   top: 18px;
   right: 28px;
   transform: rotate(16deg);
 }
 
 body::after {
-  content: "♡ ✿ ★";
+  content: "♡ ✿ ✦ ☺ ❀ ◉-◉ ☺";
   bottom: 22px;
   left: 28px;
   transform: rotate(-14deg);
@@ -131,7 +133,7 @@ label {
 }
 
 .login-card::before {
-  content: "✿  ☺  ♡  ❀";
+  content: "✿ ☺ ♡ ❀ ✦ ◉-◉ ☺ ✿";
   position: absolute;
   top: -14px;
   left: 18px;
@@ -225,7 +227,7 @@ h2 {
 }
 
 .brand-block::after {
-  content: "✿ ☺ ♡";
+  content: "✿ ☺ ♡ ❀ ✦ ◉-◉ ☺ ✿";
   position: absolute;
   right: 14px;
   bottom: 12px;
@@ -278,7 +280,7 @@ h2 {
 }
 
 .topbar::before {
-  content: "✿  ❀  ☺  ♡  ★";
+  content: "✿ ❀ ☺ ♡ ✦ ◉-◉ ☺ ✿ ❀";
   position: absolute;
   top: 12px;
   right: 18px;
@@ -288,7 +290,7 @@ h2 {
 }
 
 .topbar::after {
-  content: "cute stock day";
+  content: "cute stock day  ☺  ◉-◉  ✿  ✦  ☺";
   position: absolute;
   left: 20px;
   bottom: 10px;
@@ -354,11 +356,11 @@ h2 {
 }
 
 .spotlight-card::after {
-  content: "☺ ✿";
+  content: "☺ ✿ ◉-◉ ☺ ❀";
 }
 
 .add-card::after {
-  content: "♡ ❀";
+  content: "♡ ❀ ☺ ✿ ◉-◉";
 }
 
 .inventory-section,
@@ -368,11 +370,11 @@ h2 {
 }
 
 .inventory-section::after {
-  content: "✿ ★ ☺";
+  content: "✿ ✦ ☺ ◉-◉ ❀ ☺ ♡";
 }
 
 .sales-history-card::after {
-  content: "♡ ✿";
+  content: "♡ ✿ ☺ ✦ ◉-◉";
 }
 
 .connect-card {
@@ -439,7 +441,7 @@ h2 {
 }
 
 .section-title h2::after {
-  content: "  ✿";
+  content: "  ✿ ☺ ✦";
   color: #df6f9d;
 }
 
@@ -476,6 +478,18 @@ h2 {
   color: #7a5b00;
   font-weight: 900;
   box-shadow: 0 8px 16px rgba(118, 88, 52, 0.1);
+}
+
+.inventory-item::after {
+  content: "✿  ◉-◉  ☺  ❀";
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  color: rgba(224, 103, 143, 0.3);
+  font-size: 1.15rem;
+  font-weight: 900;
+  letter-spacing: 0.12rem;
+  pointer-events: none;
 }
 
 .image-wrap {
