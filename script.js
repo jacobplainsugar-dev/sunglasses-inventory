@@ -23,17 +23,31 @@ let history = [
   { action: "Sold", name: "Sport", quantity: 2, rawDate: "2026-06-24", date: "6/24/2026" },
 ];
 
+let salesHistory = [
+  { sunglasses_name: "Round", quantity: 1, sold_at: "2026-06-26T14:15:00" },
+  { sunglasses_name: "Sport", quantity: 3, sold_at: "2026-06-25T11:40:00" },
+  { sunglasses_name: "Sport", quantity: 2, sold_at: "2026-06-24T16:05:00" },
+];
+
 let client = null;
 let connected = false;
 let searchTerm = "";
 
 const elements = {
+  loginScreen: document.querySelector("#loginScreen"),
+  appScreen: document.querySelector("#appScreen"),
+  loginForm: document.querySelector("#loginForm"),
+  loginEmail: document.querySelector("#loginEmail"),
+  loginPassword: document.querySelector("#loginPassword"),
+  loginStatus: document.querySelector("#loginStatus"),
+  logoutButton: document.querySelector("#logoutButton"),
   connectionStatus: document.querySelector("#connectionStatus"),
   searchInput: document.querySelector("#searchInput"),
   inventoryList: document.querySelector("#inventoryList"),
   inventoryTemplate: document.querySelector("#inventoryTemplate"),
   bestSellersList: document.querySelector("#bestSellersList"),
   historyList: document.querySelector("#historyList"),
+  salesHistoryBody: document.querySelector("#salesHistoryBody"),
   addForm: document.querySelector("#addForm"),
   newName: document.querySelector("#newName"),
   newColor: document.querySelector("#newColor"),
@@ -42,6 +56,17 @@ const elements = {
   newQuantity: document.querySelector("#newQuantity"),
   newImageUrl: document.querySelector("#newImageUrl"),
 };
+
+function showLogin(message = "") {
+  elements.loginScreen.hidden = false;
+  elements.appScreen.hidden = true;
+  elements.loginStatus.textContent = message;
+}
+
+function showApp() {
+  elements.loginScreen.hidden = true;
+  elements.appScreen.hidden = false;
+}
 
 function getImage(item) {
   return item.image_url || demoImages[item.name] || "./assets/sunglasses-cover.png";
@@ -123,6 +148,30 @@ function renderHistory() {
   });
 }
 
+function renderSalesHistory() {
+  elements.salesHistoryBody.innerHTML = "";
+
+  if (!salesHistory.length) {
+    elements.salesHistoryBody.innerHTML = '<tr><td colspan="3">No sales yet.</td></tr>';
+    return;
+  }
+
+  salesHistory.slice(0, 12).forEach((sale) => {
+    const soldAt = new Date(sale.sold_at);
+    const row = document.createElement("tr");
+    const name = document.createElement("td");
+    const quantity = document.createElement("td");
+    const date = document.createElement("td");
+
+    name.textContent = sale.sunglasses_name;
+    quantity.textContent = sale.quantity;
+    date.textContent = soldAt.toLocaleDateString();
+
+    row.append(name, quantity, date);
+    elements.salesHistoryBody.appendChild(row);
+  });
+}
+
 function renderBestSellers() {
   elements.bestSellersList.innerHTML = "";
 
@@ -161,20 +210,67 @@ function renderBestSellers() {
 
 async function connectSupabase(url, key) {
   if (!window.supabase) {
-    elements.connectionStatus.textContent = "Supabase could not load. Check internet.";
+    showLogin("Supabase could not load. Check internet.");
     return;
   }
 
   try {
     client = window.supabase.createClient(url, key);
     connected = true;
-    elements.connectionStatus.textContent = "Connected to Supabase.";
-    await loadFromSupabase();
+    elements.loginStatus.textContent = "Checking login...";
+
+    const { data, error } = await client.auth.getSession();
+    if (error) {
+      showLogin(`Login check failed: ${error.message}`);
+      return;
+    }
+
+    if (data.session) {
+      showApp();
+      elements.connectionStatus.textContent = "Connected to Supabase.";
+      await loadFromSupabase();
+    } else {
+      showLogin("Please sign in to open the inventory.");
+    }
   } catch (error) {
     connected = false;
     client = null;
-    elements.connectionStatus.textContent = `Connection failed: ${error.message}`;
+    showLogin(`Connection failed: ${error.message}`);
   }
+}
+
+async function logIn(event) {
+  event.preventDefault();
+
+  if (!client) {
+    showLogin("Supabase is not connected yet.");
+    return;
+  }
+
+  elements.loginStatus.textContent = "Signing in...";
+
+  const { error } = await client.auth.signInWithPassword({
+    email: elements.loginEmail.value.trim(),
+    password: elements.loginPassword.value,
+  });
+
+  if (error) {
+    elements.loginStatus.textContent = `Login failed: ${error.message}`;
+    return;
+  }
+
+  elements.loginForm.reset();
+  showApp();
+  elements.connectionStatus.textContent = "Connected to Supabase.";
+  await loadFromSupabase();
+}
+
+async function logOut() {
+  if (client) {
+    await client.auth.signOut();
+  }
+
+  showLogin("You are logged out.");
 }
 
 async function loadFromSupabase() {
@@ -192,9 +288,28 @@ async function loadFromSupabase() {
 
   sunglasses = data || [];
   history = [];
+  await loadSalesHistory();
   renderInventory();
   renderHistory();
   renderBestSellers();
+}
+
+async function loadSalesHistory() {
+  const { data, error } = await client
+    .from("sales_history")
+    .select("*")
+    .order("sold_at", { ascending: false })
+    .limit(12);
+
+  if (error) {
+    salesHistory = [];
+    elements.connectionStatus.textContent = `Connected. Sales history table not ready yet: ${error.message}`;
+    renderSalesHistory();
+    return;
+  }
+
+  salesHistory = data || [];
+  renderSalesHistory();
 }
 
 async function changeStock(type, sunglassesId, quantity) {
@@ -222,6 +337,32 @@ async function changeStock(type, sunglassesId, quantity) {
       elements.connectionStatus.textContent = `Save failed: ${error.message}`;
       return;
     }
+
+    if (type === "sold") {
+      const saleResult = await client
+        .from("sales_history")
+        .insert({
+          sunglasses_id: item.id,
+          sunglasses_name: item.name,
+          quantity,
+        });
+
+      if (saleResult.error) {
+        elements.connectionStatus.textContent = `Stock saved, but sales history failed: ${saleResult.error.message}`;
+      }
+    }
+  }
+
+  if (type === "sold") {
+    salesHistory = [
+      {
+        sunglasses_id: item.id,
+        sunglasses_name: item.name,
+        quantity,
+        sold_at: new Date().toISOString(),
+      },
+      ...salesHistory,
+    ];
   }
 
   history = [
@@ -237,6 +378,7 @@ async function changeStock(type, sunglassesId, quantity) {
 
   renderInventory();
   renderHistory();
+  renderSalesHistory();
   renderBestSellers();
 }
 
@@ -278,6 +420,8 @@ async function addSunglasses(event) {
 }
 
 elements.addForm.addEventListener("submit", addSunglasses);
+elements.loginForm.addEventListener("submit", logIn);
+elements.logoutButton.addEventListener("click", logOut);
 elements.searchInput.addEventListener("input", (event) => {
   searchTerm = event.target.value.trim();
   renderInventory();
@@ -289,7 +433,5 @@ elements.inventoryList.addEventListener("click", (event) => {
   changeStock(button.dataset.action, button.dataset.id, Number(button.dataset.amount));
 });
 
-renderInventory();
-renderHistory();
-renderBestSellers();
+showLogin("Checking security...");
 connectSupabase(defaultSupabaseUrl, defaultSupabaseKey);

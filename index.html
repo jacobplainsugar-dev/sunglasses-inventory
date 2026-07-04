@@ -8,7 +8,24 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body>
-    <main class="dashboard-shell">
+    <main id="loginScreen" class="login-screen">
+      <section class="login-card">
+        <img src="./assets/sunglasses-cover.png" alt="Sunglasses display" />
+        <div>
+          <p class="eyebrow">Private inventory</p>
+          <h1>Sign in</h1>
+          <p class="login-copy">Only approved workers can open the sunglasses inventory.</p>
+        </div>
+        <form id="loginForm" class="login-form">
+          <input id="loginEmail" required type="email" placeholder="Email" />
+          <input id="loginPassword" required type="password" placeholder="Password" />
+          <button type="submit">Enter app</button>
+        </form>
+        <p id="loginStatus" class="login-status">Checking security...</p>
+      </section>
+    </main>
+
+    <main id="appScreen" class="dashboard-shell" hidden>
       <aside class="sidebar">
         <div class="brand-block">
           <img src="./assets/sunglasses-cover.png" alt="Sunglasses display" />
@@ -32,6 +49,7 @@
           <div>
             <h2>Sunglasses inventory</h2>
           </div>
+          <button id="logoutButton" class="logout-button" type="button">Log out</button>
           <label class="search-box">
             <span>Search</span>
             <input id="searchInput" type="search" placeholder="Aviator, Round, Sport..." />
@@ -71,6 +89,27 @@
             </div>
           </div>
           <div id="inventoryList" class="inventory-list"></div>
+        </section>
+
+        <section class="sales-history-card">
+          <div class="section-title">
+            <div>
+              <p class="eyebrow">Sold history</p>
+              <h2>Sales table</h2>
+            </div>
+          </div>
+          <div class="sales-table-wrap">
+            <table class="sales-table">
+              <thead>
+                <tr>
+                  <th>Pair</th>
+                  <th>Qty</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody id="salesHistoryBody"></tbody>
+            </table>
+          </div>
         </section>
 
         <section class="connect-card">
