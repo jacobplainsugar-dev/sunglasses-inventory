@@ -7,31 +7,18 @@ const demoImages = {
 
 const defaultSupabaseUrl = "https://ruqkfurdtwflkrworyhn.supabase.co";
 const defaultSupabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1cWtmdXJkdHdmbGtyd29yeWhuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4MTg5NDgsImV4cCI6MjA5NzM5NDk0OH0.XxvKG3VHEljes46eWdlLLtAaZrffL-9FGWhQF0Ur7dU";
+const autoLogoutMs = 5 * 60 * 1000;
 
-let sunglasses = [
-  { id: "aviator-demo", name: "Aviator", color: "Gold frame, dark green lens", size: "Med", audience: "Mens", total_quantity: 25, total_sold: 4, image_url: demoImages.Aviator },
-  { id: "round-demo", name: "Round", color: "Black frame, smoky lens", size: "Small", audience: "Womens", total_quantity: 3, total_sold: 1, image_url: demoImages.Round },
-  { id: "sport-demo", name: "Sport", color: "Matte black frame, blue lens", size: "Large", audience: "Mens", total_quantity: 18, total_sold: 5, image_url: demoImages.Sport },
-  { id: "square-demo", name: "Square", color: "Clear gray frame, dark lens", size: "Med", audience: "Womens", total_quantity: 2, total_sold: 0, image_url: demoImages.Square },
-  { id: "cateye-demo", name: "Cateye", color: "Pink frame, brown lens", size: "Med", audience: "Womens", total_quantity: 12, total_sold: 2, image_url: demoImages.Square },
-];
+let sunglasses = [];
 
-let history = [
-  { action: "Restocked", name: "Aviator", quantity: 10, rawDate: "2026-06-26", date: "6/26/2026" },
-  { action: "Sold", name: "Round", quantity: 1, rawDate: "2026-06-26", date: "6/26/2026" },
-  { action: "Sold", name: "Sport", quantity: 3, rawDate: "2026-06-25", date: "6/25/2026" },
-  { action: "Sold", name: "Sport", quantity: 2, rawDate: "2026-06-24", date: "6/24/2026" },
-];
+let history = [];
 
-let salesHistory = [
-  { sunglasses_name: "Round", quantity: 1, sold_at: "2026-06-26T14:15:00" },
-  { sunglasses_name: "Sport", quantity: 3, sold_at: "2026-06-25T11:40:00" },
-  { sunglasses_name: "Sport", quantity: 2, sold_at: "2026-06-24T16:05:00" },
-];
+let salesHistory = [];
 
 let client = null;
 let connected = false;
 let searchTerm = "";
+let autoLogoutTimer = null;
 
 const elements = {
   loginScreen: document.querySelector("#loginScreen"),
@@ -58,6 +45,7 @@ const elements = {
 };
 
 function showLogin(message = "") {
+  stopAutoLogoutTimer();
   elements.loginScreen.hidden = false;
   elements.appScreen.hidden = true;
   elements.loginStatus.textContent = message;
@@ -66,6 +54,21 @@ function showLogin(message = "") {
 function showApp() {
   elements.loginScreen.hidden = true;
   elements.appScreen.hidden = false;
+  resetAutoLogoutTimer();
+}
+
+function stopAutoLogoutTimer() {
+  window.clearTimeout(autoLogoutTimer);
+  autoLogoutTimer = null;
+}
+
+function resetAutoLogoutTimer() {
+  if (elements.appScreen.hidden) return;
+
+  stopAutoLogoutTimer();
+  autoLogoutTimer = window.setTimeout(() => {
+    logOut("The app logged out because nobody used it for 5 minutes.");
+  }, autoLogoutMs);
 }
 
 function getImage(item) {
@@ -112,6 +115,10 @@ function renderInventory() {
     node.querySelector(".total-sold").textContent = item.total_sold || 0;
     node.querySelector(".popularity").textContent = getPopularity(item.total_sold || 0);
 
+    if (Number(item.total_quantity || 0) <= 3) {
+      node.querySelector(".quantity").textContent = `${item.total_quantity} - Low stock`;
+    }
+
     node.querySelectorAll("button").forEach((button) => {
       button.dataset.id = item.id;
     });
@@ -121,6 +128,8 @@ function renderInventory() {
 }
 
 function renderHistory() {
+  if (!elements.historyList) return;
+
   elements.historyList.innerHTML = "";
 
   if (!history.length) {
@@ -149,6 +158,8 @@ function renderHistory() {
 }
 
 function renderSalesHistory() {
+  if (!elements.salesHistoryBody) return;
+
   elements.salesHistoryBody.innerHTML = "";
 
   if (!salesHistory.length) {
@@ -215,7 +226,11 @@ async function connectSupabase(url, key) {
   }
 
   try {
-    client = window.supabase.createClient(url, key);
+    client = window.supabase.createClient(url, key, {
+      auth: {
+        persistSession: false,
+      },
+    });
     connected = true;
     elements.loginStatus.textContent = "Checking login...";
 
@@ -265,12 +280,12 @@ async function logIn(event) {
   await loadFromSupabase();
 }
 
-async function logOut() {
+async function logOut(message = "You are logged out.") {
   if (client) {
     await client.auth.signOut();
   }
 
-  showLogin("You are logged out.");
+  showLogin(message);
 }
 
 async function loadFromSupabase() {
@@ -421,7 +436,10 @@ async function addSunglasses(event) {
 
 elements.addForm.addEventListener("submit", addSunglasses);
 elements.loginForm.addEventListener("submit", logIn);
-elements.logoutButton.addEventListener("click", logOut);
+elements.logoutButton.addEventListener("click", () => logOut());
+["click", "keydown", "input", "touchstart"].forEach((eventName) => {
+  document.addEventListener(eventName, resetAutoLogoutTimer);
+});
 elements.searchInput.addEventListener("input", (event) => {
   searchTerm = event.target.value.trim();
   renderInventory();
