@@ -183,10 +183,7 @@ function renderInventory() {
 
   visibleSunglasses.forEach((item) => {
     const node = elements.inventoryTemplate.content.cloneNode(true);
-    const image = node.querySelector(".item-image");
 
-    image.src = getImage(item);
-    image.alt = `${item.name} sunglasses`;
     node.querySelector("h3").textContent = `${item.name} ${item.size || ""}`.trim();
     node.querySelector(".quantity").textContent = item.total_quantity;
     node.querySelector(".color").textContent = item.color || "No color added";
