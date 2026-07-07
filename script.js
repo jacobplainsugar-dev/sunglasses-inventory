@@ -36,7 +36,6 @@ const elements = {
   noSalesList: document.querySelector("#noSalesList"),
   inventoryList: document.querySelector("#inventoryList"),
   inventoryTemplate: document.querySelector("#inventoryTemplate"),
-  bestSellersList: document.querySelector("#bestSellersList"),
   historyList: document.querySelector("#historyList"),
   dailySalesTables: document.querySelector("#dailySalesTables"),
   addForm: document.querySelector("#addForm"),
@@ -309,42 +308,6 @@ function renderSalesHistory() {
   });
 }
 
-function renderBestSellers() {
-  elements.bestSellersList.innerHTML = "";
-
-  const bestSellers = sunglasses
-    .filter((item) => Number(item.total_sold || 0) > 0)
-    .sort((a, b) => Number(b.total_sold || 0) - Number(a.total_sold || 0))
-    .slice(0, 4);
-
-  if (!bestSellers.length) {
-    elements.bestSellersList.innerHTML = "<p>No sales yet.</p>";
-    return;
-  }
-
-  bestSellers.forEach((item) => {
-    const row = document.createElement("div");
-    row.className = "best-seller-item";
-
-    const image = document.createElement("img");
-    image.src = getImage(item);
-    image.alt = `${item.name} sunglasses`;
-
-    const copy = document.createElement("div");
-    const title = document.createElement("p");
-    const detail = document.createElement("small");
-    const count = document.createElement("strong");
-
-    title.textContent = item.name;
-    detail.textContent = getPopularity(item);
-    count.textContent = `${item.total_sold || 0} sold`;
-
-    copy.append(title, detail, count);
-    row.append(image, copy);
-    elements.bestSellersList.appendChild(row);
-  });
-}
-
 async function connectSupabase(url, key) {
   if (!window.supabase) {
     showLogin("Supabase could not load. Check internet.");
@@ -432,7 +395,6 @@ async function loadFromSupabase() {
   await loadSalesHistory();
   renderInventory();
   renderHistory();
-  renderBestSellers();
   renderLowStock();
   renderNoSalesAlert();
 }
@@ -527,7 +489,6 @@ async function changeStock(type, sunglassesId, quantity) {
   renderInventory();
   renderHistory();
   renderSalesHistory();
-  renderBestSellers();
   renderLowStock();
   renderNoSalesAlert();
 }
@@ -554,7 +515,6 @@ async function deleteSunglasses(sunglassesId) {
   sunglasses = sunglasses.filter((entry) => entry.id !== sunglassesId);
   elements.connectionStatus.textContent = `${item.name} was deleted.`;
   renderInventory();
-  renderBestSellers();
   renderLowStock();
   renderNoSalesAlert();
 }
@@ -593,7 +553,6 @@ async function addSunglasses(event) {
 
   elements.addForm.reset();
   renderInventory();
-  renderBestSellers();
   renderLowStock();
   renderNoSalesAlert();
 }

@@ -329,7 +329,6 @@ h3 {
 .topbar,
 .low-stock-card,
 .no-sales-card,
-.spotlight-card,
 .add-card,
 .inventory-section,
 .sales-history-card,
@@ -386,12 +385,6 @@ h3 {
   align-self: end;
   background: #ffc9de;
   color: #5c2438;
-}
-
-.highlight-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 420px);
-  gap: 18px;
 }
 
 .low-stock-card {
@@ -478,21 +471,12 @@ h3 {
   font-weight: 900;
 }
 
-.spotlight-card,
 .add-card,
 .inventory-section,
 .sales-history-card,
 .history-card,
 .connect-card {
   padding: 18px;
-}
-
-.spotlight-card {
-  position: relative;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 96% 10%, rgba(255, 216, 232, 0.75) 0 13%, transparent 14%),
-    linear-gradient(135deg, #ffffff, var(--sky));
 }
 
 .add-card {
@@ -503,7 +487,6 @@ h3 {
     linear-gradient(135deg, #ffffff, var(--peach));
 }
 
-.spotlight-card::after,
 .add-card::after,
 .inventory-section::after,
 .sales-history-card::after {
@@ -513,10 +496,6 @@ h3 {
   color: rgba(224, 103, 143, 0.28);
   font-size: 1.7rem;
   font-weight: 800;
-}
-
-.spotlight-card::after {
-  content: "☺ ✿ ◉-◉ ☺ ❀";
 }
 
 .add-card::after {
@@ -550,45 +529,9 @@ h3 {
   color: var(--muted);
 }
 
-.best-sellers-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.best-seller-item {
-  display: grid;
-  grid-template-columns: 70px minmax(0, 1fr);
-  gap: 12px;
-  align-items: center;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.72);
-  padding: 10px;
-}
-
-.best-seller-item img {
-  width: 70px;
-  height: 54px;
-  border-radius: 8px;
-  object-fit: cover;
-}
-
-.best-seller-item p {
-  margin-bottom: 0.2rem;
-  font-weight: 800;
-}
-
-.best-seller-item small {
-  color: var(--muted);
-}
-
-.best-seller-item strong {
-  display: block;
-  margin-top: 0.3rem;
-}
-
 .add-form {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 10px;
 }
 
@@ -844,8 +787,7 @@ h3 {
 
 @media (max-width: 950px) {
   .dashboard-shell,
-  .topbar,
-  .highlight-grid {
+  .topbar {
     grid-template-columns: 1fr;
   }
 
@@ -866,7 +808,7 @@ h3 {
   }
 
   .brand-block,
-  .best-sellers-list {
+  .add-form {
     grid-template-columns: 1fr;
   }
 
