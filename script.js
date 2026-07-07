@@ -287,13 +287,19 @@ function renderSalesHistory() {
 
     const body = table.querySelector("tbody");
 
-    sales.forEach((sale) => {
+    const totalsByPair = sales.reduce((totals, sale) => {
+      const pairName = sale.sunglasses_name || "Unknown pair";
+      totals[pairName] = (totals[pairName] || 0) + Number(sale.quantity || 0);
+      return totals;
+    }, {});
+
+    Object.entries(totalsByPair).forEach(([pairName, totalQuantity]) => {
       const row = document.createElement("tr");
       const name = document.createElement("td");
       const quantity = document.createElement("td");
 
-      name.textContent = sale.sunglasses_name;
-      quantity.textContent = sale.quantity;
+      name.textContent = pairName;
+      quantity.textContent = totalQuantity;
 
       row.append(name, quantity);
       body.appendChild(row);
