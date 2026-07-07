@@ -595,8 +595,18 @@ h3 {
   pointer-events: none;
 }
 
+.tiny-item-image {
+  width: 62px;
+  height: 48px;
+  margin: 12px 12px 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  object-fit: cover;
+}
+
 .item-main {
-  padding: 12px 12px 0;
+  padding: 0 12px;
 }
 
 .item-main h3 {
