@@ -145,7 +145,7 @@ function renderLowStock() {
 function renderNoSalesAlert() {
   const noSalesItems = sunglasses
     .filter((item) => Number(item.total_quantity || 0) > 0)
-    .filter((item) => getRecentSold(item, 14) === 0)
+    .filter((item) => getRecentSold(item, 4) === 0)
     .sort((a, b) => a.name.localeCompare(b.name));
 
   if (!noSalesItems.length) {
@@ -165,7 +165,7 @@ function renderNoSalesAlert() {
     name.textContent = item.name;
 
     const details = document.createElement("span");
-    details.textContent = "0 sold in 14 days";
+    details.textContent = "0 sold in 4 days";
 
     row.append(name, details);
     elements.noSalesList.appendChild(row);
