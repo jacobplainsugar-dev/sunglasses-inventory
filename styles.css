@@ -703,6 +703,31 @@ h3 {
   background: #ffd66b;
 }
 
+.daily-sales-tables {
+  display: grid;
+  gap: 14px;
+}
+
+.daily-sales-card {
+  border: 1px solid rgba(244, 223, 204, 0.95);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 98% 8%, rgba(255, 216, 232, 0.7) 0 12%, transparent 13%),
+    rgba(255, 255, 255, 0.72);
+  padding: 12px;
+}
+
+.daily-sales-card h3 {
+  margin-bottom: 10px;
+  color: #5c2438;
+}
+
+.empty-sales {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-weight: 800;
+}
+
 .sales-table-wrap {
   overflow-x: auto;
   border: 1px solid var(--line);

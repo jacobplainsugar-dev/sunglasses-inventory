@@ -36,7 +36,7 @@ const elements = {
   inventoryTemplate: document.querySelector("#inventoryTemplate"),
   bestSellersList: document.querySelector("#bestSellersList"),
   historyList: document.querySelector("#historyList"),
-  salesHistoryBody: document.querySelector("#salesHistoryBody"),
+  dailySalesTables: document.querySelector("#dailySalesTables"),
   addForm: document.querySelector("#addForm"),
   newName: document.querySelector("#newName"),
   newColor: document.querySelector("#newColor"),
@@ -195,28 +195,67 @@ function renderHistory() {
 }
 
 function renderSalesHistory() {
-  if (!elements.salesHistoryBody) return;
+  if (!elements.dailySalesTables) return;
 
-  elements.salesHistoryBody.innerHTML = "";
+  elements.dailySalesTables.innerHTML = "";
 
   if (!salesHistory.length) {
-    elements.salesHistoryBody.innerHTML = '<tr><td colspan="3">No sales yet.</td></tr>';
+    elements.dailySalesTables.innerHTML = '<p class="empty-sales">No sales yet.</p>';
     return;
   }
 
-  salesHistory.slice(0, 12).forEach((sale) => {
+  const salesByDay = salesHistory.reduce((groups, sale) => {
     const soldAt = new Date(sale.sold_at);
-    const row = document.createElement("tr");
-    const name = document.createElement("td");
-    const quantity = document.createElement("td");
-    const date = document.createElement("td");
+    const dayKey = soldAt.toLocaleDateString();
 
-    name.textContent = sale.sunglasses_name;
-    quantity.textContent = sale.quantity;
-    date.textContent = soldAt.toLocaleDateString();
+    if (!groups[dayKey]) {
+      groups[dayKey] = [];
+    }
 
-    row.append(name, quantity, date);
-    elements.salesHistoryBody.appendChild(row);
+    groups[dayKey].push(sale);
+    return groups;
+  }, {});
+
+  Object.entries(salesByDay).forEach(([day, sales]) => {
+    const dailyCard = document.createElement("section");
+    dailyCard.className = "daily-sales-card";
+
+    const title = document.createElement("h3");
+    const dailyTotal = sales.reduce((total, sale) => total + Number(sale.quantity || 0), 0);
+    title.textContent = `${day} - ${dailyTotal} sold`;
+
+    const tableWrap = document.createElement("div");
+    tableWrap.className = "sales-table-wrap";
+
+    const table = document.createElement("table");
+    table.className = "sales-table";
+    table.innerHTML = `
+      <thead>
+        <tr>
+          <th>Pair</th>
+          <th>Qty</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    `;
+
+    const body = table.querySelector("tbody");
+
+    sales.forEach((sale) => {
+      const row = document.createElement("tr");
+      const name = document.createElement("td");
+      const quantity = document.createElement("td");
+
+      name.textContent = sale.sunglasses_name;
+      quantity.textContent = sale.quantity;
+
+      row.append(name, quantity);
+      body.appendChild(row);
+    });
+
+    tableWrap.appendChild(table);
+    dailyCard.append(title, tableWrap);
+    elements.dailySalesTables.appendChild(dailyCard);
   });
 }
 
@@ -352,7 +391,7 @@ async function loadSalesHistory() {
     .from("sales_history")
     .select("*")
     .order("sold_at", { ascending: false })
-    .limit(12);
+    .limit(100);
 
   if (error) {
     salesHistory = [];
