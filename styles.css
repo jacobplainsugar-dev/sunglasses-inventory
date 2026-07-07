@@ -329,7 +329,6 @@ h3 {
 .topbar,
 .low-stock-card,
 .no-sales-card,
-.restock-priority-card,
 .spotlight-card,
 .add-card,
 .inventory-section,
@@ -476,47 +475,6 @@ h3 {
 
 .no-sales-item span {
   color: #7860be;
-  font-weight: 900;
-}
-
-.restock-priority-card {
-  position: relative;
-  overflow: hidden;
-  padding: 18px;
-  background:
-    radial-gradient(circle at 96% 14%, rgba(201, 242, 218, 0.9) 0 12%, transparent 13%),
-    linear-gradient(135deg, #fff, #e6fbf7 45%, #fff0a8);
-}
-
-.restock-priority-card::after {
-  content: "Restock";
-  position: absolute;
-  right: 16px;
-  top: 14px;
-  color: rgba(58, 169, 153, 0.2);
-  font-size: 2rem;
-  font-weight: 900;
-  transform: rotate(8deg);
-}
-
-.restock-priority-list {
-  display: grid;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.restock-priority-item {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
-  border: 1px solid rgba(58, 169, 153, 0.2);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.78);
-  padding: 10px 12px;
-}
-
-.restock-priority-item span {
-  color: #237d72;
   font-weight: 900;
 }
 
