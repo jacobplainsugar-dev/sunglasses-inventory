@@ -85,9 +85,27 @@ function makeId() {
   return `demo-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
-function getPopularity(totalSold) {
-  if (totalSold >= 5) return "Popular";
-  if (totalSold >= 2) return "Okay";
+function getRecentSold(item, dayCount = 5) {
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - dayCount);
+
+  return salesHistory
+    .filter((sale) => {
+      const soldAt = new Date(sale.sold_at);
+      const matchesItem = sale.sunglasses_id
+        ? sale.sunglasses_id === item.id
+        : sale.sunglasses_name === item.name;
+
+      return matchesItem && soldAt >= startDate;
+    })
+    .reduce((total, sale) => total + Number(sale.quantity || 0), 0);
+}
+
+function getPopularity(item) {
+  const recentSold = getRecentSold(item, 5);
+
+  if (recentSold >= 20) return "Popular";
+  if (recentSold >= 5) return "Okay";
   return "Slow";
 }
 
@@ -144,7 +162,7 @@ function renderInventory() {
     node.querySelector(".size").textContent = item.size || "No size added";
     node.querySelector(".audience").textContent = item.audience || "Not set";
     node.querySelector(".total-sold").textContent = item.total_sold || 0;
-    node.querySelector(".popularity").textContent = getPopularity(item.total_sold || 0);
+    node.querySelector(".popularity").textContent = getPopularity(item);
 
     if (Number(item.total_quantity || 0) <= 3) {
       node.querySelector(".quantity").textContent = `${item.total_quantity} - Low stock`;
@@ -286,7 +304,7 @@ function renderBestSellers() {
     const count = document.createElement("strong");
 
     title.textContent = item.name;
-    detail.textContent = getPopularity(item.total_sold || 0);
+    detail.textContent = getPopularity(item);
     count.textContent = `${item.total_sold || 0} sold`;
 
     copy.append(title, detail, count);
