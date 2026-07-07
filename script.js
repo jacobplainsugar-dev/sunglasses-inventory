@@ -30,6 +30,8 @@ const elements = {
   logoutButton: document.querySelector("#logoutButton"),
   connectionStatus: document.querySelector("#connectionStatus"),
   searchInput: document.querySelector("#searchInput"),
+  lowStockCard: document.querySelector("#lowStockCard"),
+  lowStockList: document.querySelector("#lowStockList"),
   inventoryList: document.querySelector("#inventoryList"),
   inventoryTemplate: document.querySelector("#inventoryTemplate"),
   bestSellersList: document.querySelector("#bestSellersList"),
@@ -89,6 +91,35 @@ function getPopularity(totalSold) {
   return "Slow";
 }
 
+function renderLowStock() {
+  const lowStockItems = sunglasses
+    .filter((item) => Number(item.total_quantity || 0) <= 3)
+    .sort((a, b) => Number(a.total_quantity || 0) - Number(b.total_quantity || 0));
+
+  if (!lowStockItems.length) {
+    elements.lowStockCard.hidden = true;
+    elements.lowStockList.innerHTML = "";
+    return;
+  }
+
+  elements.lowStockCard.hidden = false;
+  elements.lowStockList.innerHTML = "";
+
+  lowStockItems.forEach((item) => {
+    const row = document.createElement("div");
+    row.className = "low-stock-item";
+
+    const name = document.createElement("strong");
+    name.textContent = item.name;
+
+    const details = document.createElement("span");
+    details.textContent = `${item.total_quantity} left`;
+
+    row.append(name, details);
+    elements.lowStockList.appendChild(row);
+  });
+}
+
 function renderInventory() {
   elements.inventoryList.innerHTML = "";
 
@@ -117,6 +148,12 @@ function renderInventory() {
 
     if (Number(item.total_quantity || 0) <= 3) {
       node.querySelector(".quantity").textContent = `${item.total_quantity} - Low stock`;
+    }
+
+    if (Number(item.total_quantity || 0) <= 0) {
+      const soldButton = node.querySelector(".sold-button");
+      soldButton.disabled = true;
+      soldButton.textContent = "Sold out";
     }
 
     node.querySelectorAll("button").forEach((button) => {
@@ -307,6 +344,7 @@ async function loadFromSupabase() {
   renderInventory();
   renderHistory();
   renderBestSellers();
+  renderLowStock();
 }
 
 async function loadSalesHistory() {
@@ -330,6 +368,11 @@ async function loadSalesHistory() {
 async function changeStock(type, sunglassesId, quantity) {
   const item = sunglasses.find((entry) => entry.id === sunglassesId);
   if (!item || quantity <= 0) return;
+
+  if (type === "sold" && Number(item.total_quantity || 0) <= 0) {
+    elements.connectionStatus.textContent = `${item.name} is sold out. Restock before selling more.`;
+    return;
+  }
 
   item.total_quantity = type === "restock"
     ? Number(item.total_quantity) + quantity
@@ -395,6 +438,7 @@ async function changeStock(type, sunglassesId, quantity) {
   renderHistory();
   renderSalesHistory();
   renderBestSellers();
+  renderLowStock();
 }
 
 async function deleteSunglasses(sunglassesId) {
@@ -420,6 +464,7 @@ async function deleteSunglasses(sunglassesId) {
   elements.connectionStatus.textContent = `${item.name} was deleted.`;
   renderInventory();
   renderBestSellers();
+  renderLowStock();
 }
 
 async function addSunglasses(event) {
@@ -457,6 +502,7 @@ async function addSunglasses(event) {
   elements.addForm.reset();
   renderInventory();
   renderBestSellers();
+  renderLowStock();
 }
 
 elements.addForm.addEventListener("submit", addSunglasses);
