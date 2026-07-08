@@ -15,6 +15,8 @@ let history = [];
 
 let salesHistory = [];
 
+let badSalesDays = [];
+
 let client = null;
 let connected = false;
 let searchTerm = "";
@@ -30,6 +32,8 @@ const elements = {
   logoutButton: document.querySelector("#logoutButton"),
   connectionStatus: document.querySelector("#connectionStatus"),
   searchInput: document.querySelector("#searchInput"),
+  badDayButton: document.querySelector("#badDayButton"),
+  badDayStatus: document.querySelector("#badDayStatus"),
   lowStockCard: document.querySelector("#lowStockCard"),
   lowStockList: document.querySelector("#lowStockList"),
   noSalesCard: document.querySelector("#noSalesCard"),
@@ -86,18 +90,62 @@ function makeId() {
   return `demo-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
+function getDateKey(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function isBadSalesDay(date) {
+  const dateKey = typeof date === "string" ? date : getDateKey(date);
+  return badSalesDays.includes(dateKey);
+}
+
+function getGoodSalesDayKeys(dayCount) {
+  const goodDays = [];
+  const cursor = new Date();
+  let checkedDays = 0;
+
+  while (goodDays.length < dayCount && checkedDays < 45) {
+    const dateKey = getDateKey(cursor);
+
+    if (!isBadSalesDay(dateKey)) {
+      goodDays.push(dateKey);
+    }
+
+    cursor.setDate(cursor.getDate() - 1);
+    checkedDays += 1;
+  }
+
+  return goodDays;
+}
+
+function renderBadDayControl() {
+  const todayKey = getDateKey();
+  const todayIsBad = isBadSalesDay(todayKey);
+
+  elements.badDayButton.textContent = todayIsBad
+    ? "Remove bad day from today"
+    : "Mark today as bad weather/fire day";
+
+  elements.badDayStatus.textContent = todayIsBad
+    ? "Today is being skipped for popularity and no-sales alerts."
+    : "Today is counting as a normal sales day.";
+}
+
 function getRecentSold(item, dayCount = 5) {
-  const startDate = new Date();
-  startDate.setDate(startDate.getDate() - dayCount);
+  const goodSalesDays = getGoodSalesDayKeys(dayCount);
 
   return salesHistory
     .filter((sale) => {
       const soldAt = new Date(sale.sold_at);
+      const soldDateKey = getDateKey(soldAt);
       const matchesItem = sale.sunglasses_id
         ? sale.sunglasses_id === item.id
         : sale.sunglasses_name === item.name;
 
-      return matchesItem && soldAt >= startDate;
+      return matchesItem && goodSalesDays.includes(soldDateKey);
     })
     .reduce((total, sale) => total + Number(sale.quantity || 0), 0);
 }
@@ -162,7 +210,7 @@ function renderNoSalesAlert() {
     name.textContent = item.name;
 
     const details = document.createElement("span");
-    details.textContent = "0 sold in 4 days";
+    details.textContent = "0 sold in last 4 good sales days";
 
     row.append(name, details);
     elements.noSalesList.appendChild(row);
@@ -400,10 +448,12 @@ async function loadFromSupabase() {
   sunglasses = data || [];
   history = [];
   await loadSalesHistory();
+  await loadBadSalesDays();
   renderInventory();
   renderHistory();
   renderLowStock();
   renderNoSalesAlert();
+  renderBadDayControl();
 }
 
 async function loadSalesHistory() {
@@ -422,6 +472,65 @@ async function loadSalesHistory() {
 
   salesHistory = data || [];
   renderSalesHistory();
+}
+
+async function loadBadSalesDays() {
+  const { data, error } = await client
+    .from("bad_sales_days")
+    .select("day")
+    .order("day", { ascending: false })
+    .limit(45);
+
+  if (error) {
+    badSalesDays = [];
+    renderBadDayControl();
+    elements.badDayStatus.textContent = "Bad day button needs the updated Supabase SQL first.";
+    return;
+  }
+
+  badSalesDays = (data || []).map((entry) => entry.day);
+  renderBadDayControl();
+}
+
+async function toggleBadSalesDay() {
+  const todayKey = getDateKey();
+  const todayIsBad = isBadSalesDay(todayKey);
+
+  if (!connected) {
+    elements.connectionStatus.textContent = "Supabase needs to be connected before saving bad sales days.";
+    return;
+  }
+
+  if (todayIsBad) {
+    const { error } = await client
+      .from("bad_sales_days")
+      .delete()
+      .eq("day", todayKey);
+
+    if (error) {
+      elements.connectionStatus.textContent = `Could not remove bad day: ${error.message}`;
+      return;
+    }
+
+    badSalesDays = badSalesDays.filter((day) => day !== todayKey);
+    elements.connectionStatus.textContent = "Today is counting as a normal sales day again.";
+  } else {
+    const { error } = await client
+      .from("bad_sales_days")
+      .insert({ day: todayKey });
+
+    if (error) {
+      elements.connectionStatus.textContent = `Could not mark bad day: ${error.message}`;
+      return;
+    }
+
+    badSalesDays = [todayKey, ...badSalesDays];
+    elements.connectionStatus.textContent = "Today will be skipped for popularity and no-sales alerts.";
+  }
+
+  renderBadDayControl();
+  renderInventory();
+  renderNoSalesAlert();
 }
 
 async function changeStock(type, sunglassesId, quantity) {
@@ -567,6 +676,7 @@ async function addSunglasses(event) {
 elements.addForm.addEventListener("submit", addSunglasses);
 elements.loginForm.addEventListener("submit", logIn);
 elements.logoutButton.addEventListener("click", () => logOut());
+elements.badDayButton.addEventListener("click", toggleBadSalesDay);
 ["click", "keydown", "input", "touchstart"].forEach((eventName) => {
   document.addEventListener(eventName, resetAutoLogoutTimer);
 });
