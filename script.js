@@ -172,10 +172,9 @@ function getAverageSold() {
 
 function getPopularity(item) {
   const soldThisWeek = getRecentSold(item, 7);
-  const soldAllTime = getAllTimeSold(item);
 
   if (soldThisWeek >= 60) return "Popular";
-  if (soldAllTime > 0) return "Okay";
+  if (soldThisWeek >= 25) return "Okay";
   return "Slow";
 }
 
