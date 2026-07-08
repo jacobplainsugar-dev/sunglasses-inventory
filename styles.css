@@ -125,7 +125,8 @@ body::after {
 .cute-scatter span:nth-child(30) { top: 58%; left: 88%; font-size: 2.5rem; transform: rotate(8deg); }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
@@ -158,7 +159,8 @@ button.danger:hover:not(:disabled) {
   background: var(--danger-dark);
 }
 
-input {
+input,
+select {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: 8px;

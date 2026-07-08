@@ -101,6 +101,10 @@
             <input id="newSize" required placeholder="Size, like Med" />
             <input id="newAudience" required placeholder="Mens or Womens" />
             <input id="newQuantity" required min="0" type="number" placeholder="Qty" />
+            <select id="newPriceType" required>
+              <option value="Normal">Normal</option>
+              <option value="Vintage">Vintage</option>
+            </select>
             <input id="newImageUrl" type="url" placeholder="Image URL optional" />
             <button type="submit">Add</button>
           </form>
@@ -155,6 +159,10 @@
               <div>
                 <dt>Popularity</dt>
                 <dd class="popularity"></dd>
+              </div>
+              <div>
+                <dt>Price</dt>
+                <dd class="price"></dd>
               </div>
             </dl>
           </div>

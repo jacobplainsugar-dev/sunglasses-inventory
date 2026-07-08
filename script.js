@@ -48,6 +48,7 @@ const elements = {
   newSize: document.querySelector("#newSize"),
   newAudience: document.querySelector("#newAudience"),
   newQuantity: document.querySelector("#newQuantity"),
+  newPriceType: document.querySelector("#newPriceType"),
   newImageUrl: document.querySelector("#newImageUrl"),
 };
 
@@ -180,6 +181,18 @@ function getPopularity(item) {
   return "Slow";
 }
 
+function getPriceEach(item) {
+  if (Number(item.price_each || 0) > 0) {
+    return Number(item.price_each);
+  }
+
+  return item.price_type === "Vintage" ? 60 : 15;
+}
+
+function formatMoney(amount) {
+  return `$${Number(amount || 0).toFixed(2)}`;
+}
+
 function renderLowStock() {
   const lowStockItems = sunglasses
     .filter((item) => Number(item.total_quantity || 0) <= 3)
@@ -243,7 +256,7 @@ function renderInventory() {
   elements.inventoryList.innerHTML = "";
 
   const visibleSunglasses = sunglasses.filter((item) =>
-    `${item.name} ${item.color} ${item.size} ${item.audience}`.toLowerCase().includes(searchTerm.toLowerCase())
+    `${item.name} ${item.color} ${item.size} ${item.audience} ${item.price_type}`.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (!visibleSunglasses.length) {
@@ -262,6 +275,7 @@ function renderInventory() {
     node.querySelector(".audience").textContent = item.audience || "Not set";
     node.querySelector(".total-sold").textContent = item.total_sold || 0;
     node.querySelector(".popularity").textContent = getPopularity(item);
+    node.querySelector(".price").textContent = `${item.price_type || "Normal"} - ${formatMoney(getPriceEach(item))}`;
 
     if (Number(item.total_quantity || 0) <= 3) {
       node.querySelector(".quantity").textContent = `${item.total_quantity} - Low stock`;
@@ -339,7 +353,12 @@ function renderSalesHistory() {
 
     const title = document.createElement("h3");
     const dailyTotal = sales.reduce((total, sale) => total + Number(sale.quantity || 0), 0);
-    title.textContent = `${day} - ${dailyTotal} sold`;
+    const dailyMoney = sales.reduce((total, sale) => {
+      const pair = sunglasses.find((item) => item.id === sale.sunglasses_id || item.name === sale.sunglasses_name);
+      const unitPrice = Number(sale.unit_price || getPriceEach(pair || {}));
+      return total + Number(sale.quantity || 0) * unitPrice;
+    }, 0);
+    title.textContent = `${day} - ${dailyTotal} sold - ${formatMoney(dailyMoney)}`;
 
     const tableWrap = document.createElement("div");
     tableWrap.className = "sales-table-wrap";
@@ -351,6 +370,7 @@ function renderSalesHistory() {
         <tr>
           <th>Pair</th>
           <th>Qty</th>
+          <th>Money</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -360,19 +380,29 @@ function renderSalesHistory() {
 
     const totalsByPair = sales.reduce((totals, sale) => {
       const pairName = sale.sunglasses_name || "Unknown pair";
-      totals[pairName] = (totals[pairName] || 0) + Number(sale.quantity || 0);
+      const pair = sunglasses.find((item) => item.id === sale.sunglasses_id || item.name === pairName);
+      const unitPrice = Number(sale.unit_price || getPriceEach(pair || {}));
+
+      if (!totals[pairName]) {
+        totals[pairName] = { quantity: 0, money: 0 };
+      }
+
+      totals[pairName].quantity += Number(sale.quantity || 0);
+      totals[pairName].money += Number(sale.quantity || 0) * unitPrice;
       return totals;
     }, {});
 
-    Object.entries(totalsByPair).forEach(([pairName, totalQuantity]) => {
+    Object.entries(totalsByPair).forEach(([pairName, total]) => {
       const row = document.createElement("tr");
       const name = document.createElement("td");
       const quantity = document.createElement("td");
+      const money = document.createElement("td");
 
       name.textContent = pairName;
-      quantity.textContent = totalQuantity;
+      quantity.textContent = total.quantity;
+      money.textContent = formatMoney(total.money);
 
-      row.append(name, quantity);
+      row.append(name, quantity, money);
       body.appendChild(row);
     });
 
@@ -590,6 +620,7 @@ async function changeStock(type, sunglassesId, quantity) {
           sunglasses_id: item.id,
           sunglasses_name: item.name,
           quantity,
+          unit_price: getPriceEach(item),
         });
 
       if (saleResult.error) {
@@ -604,6 +635,7 @@ async function changeStock(type, sunglassesId, quantity) {
         sunglasses_id: item.id,
         sunglasses_name: item.name,
         quantity,
+        unit_price: getPriceEach(item),
         sold_at: new Date().toISOString(),
       },
       ...salesHistory,
@@ -665,6 +697,8 @@ async function addSunglasses(event) {
     audience: elements.newAudience.value.trim(),
     total_quantity: Number(elements.newQuantity.value),
     total_sold: 0,
+    price_type: elements.newPriceType.value,
+    price_each: elements.newPriceType.value === "Vintage" ? 60 : 15,
     image_url: elements.newImageUrl.value.trim() || null,
   };
 
