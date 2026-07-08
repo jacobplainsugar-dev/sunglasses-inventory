@@ -105,8 +105,8 @@ function getRecentSold(item, dayCount = 5) {
 function getPopularity(item) {
   const recentSold = getRecentSold(item, 5);
 
-  if (recentSold >= 20) return "Popular";
-  if (recentSold >= 5) return "Okay";
+  if (recentSold >= 5) return "Popular";
+  if (recentSold > 0) return "Okay";
   return "Slow";
 }
 
