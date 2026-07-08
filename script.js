@@ -150,11 +150,33 @@ function getRecentSold(item, dayCount = 5) {
     .reduce((total, sale) => total + Number(sale.quantity || 0), 0);
 }
 
-function getPopularity(item) {
-  const recentSold = getRecentSold(item, 5);
+function getAllTimeSold(item) {
+  const historyTotal = salesHistory
+    .filter((sale) => {
+      return sale.sunglasses_id
+        ? sale.sunglasses_id === item.id
+        : sale.sunglasses_name === item.name;
+    })
+    .reduce((total, sale) => total + Number(sale.quantity || 0), 0);
 
-  if (recentSold >= 5) return "Popular";
-  if (recentSold > 0) return "Okay";
+  return Math.max(historyTotal, Number(item.total_sold || 0));
+}
+
+function getAverageSold() {
+  if (!sunglasses.length) return 0;
+
+  const totalSold = sunglasses.reduce((total, item) => total + getAllTimeSold(item), 0);
+  return totalSold / sunglasses.length;
+}
+
+function getPopularity(item) {
+  const sold = getAllTimeSold(item);
+  const averageSold = getAverageSold();
+
+  if (sold === 0) return "Slow";
+  if (averageSold === 0) return "Okay";
+  if (sold >= averageSold * 1.25) return "Popular";
+  if (sold >= averageSold * 0.5) return "Okay";
   return "Slow";
 }
 
