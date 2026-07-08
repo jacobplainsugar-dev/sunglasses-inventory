@@ -171,13 +171,11 @@ function getAverageSold() {
 }
 
 function getPopularity(item) {
-  const sold = getAllTimeSold(item);
-  const averageSold = getAverageSold();
+  const soldThisWeek = getRecentSold(item, 7);
+  const soldAllTime = getAllTimeSold(item);
 
-  if (sold === 0) return "Slow";
-  if (averageSold === 0) return "Okay";
-  if (sold >= averageSold * 1.25) return "Popular";
-  if (sold >= averageSold * 0.5) return "Okay";
+  if (soldThisWeek >= 60) return "Popular";
+  if (soldAllTime > 0) return "Okay";
   return "Slow";
 }
 
@@ -186,7 +184,9 @@ function getPriceEach(item) {
     return Number(item.price_each);
   }
 
-  return item.price_type === "Vintage" ? 60 : 15;
+  if (item.price_type === "Vintage") return 35;
+  if (item.price_type === "Polarized") return 25;
+  return 20;
 }
 
 function formatMoney(amount) {
@@ -698,7 +698,7 @@ async function addSunglasses(event) {
     total_quantity: Number(elements.newQuantity.value),
     total_sold: 0,
     price_type: elements.newPriceType.value,
-    price_each: elements.newPriceType.value === "Vintage" ? 60 : 15,
+    price_each: getPriceEach({ price_type: elements.newPriceType.value }),
     image_url: elements.newImageUrl.value.trim() || null,
   };
 
