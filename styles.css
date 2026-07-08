@@ -710,8 +710,9 @@ h3 {
 }
 
 .inventory-list {
-  grid-template-columns: 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 220px));
   gap: 6px;
+  align-items: start;
 }
 
 .inventory-item {
@@ -733,11 +734,11 @@ h3 {
 
 .item-toggle {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 8px;
+  gap: 2px;
   align-items: center;
   width: 100%;
-  padding: 8px 34px 8px 10px;
+  min-height: 46px;
+  padding: 7px 30px 7px 9px;
   background: rgba(255, 255, 255, 0.72);
   color: var(--ink);
   text-align: left;
@@ -756,7 +757,7 @@ h3 {
 
 .item-mini-stats {
   color: var(--muted);
-  font-size: 0.82rem;
+  font-size: 0.76rem;
   font-weight: 800;
   white-space: nowrap;
 }
