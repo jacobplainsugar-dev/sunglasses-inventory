@@ -254,11 +254,8 @@ function renderInventory() {
   visibleSunglasses.forEach((item) => {
     const node = elements.inventoryTemplate.content.cloneNode(true);
 
-    const image = node.querySelector(".tiny-item-image");
-    image.src = getImage(item);
-    image.alt = `${item.name} sunglasses`;
-
-    node.querySelector("h3").textContent = `${item.name} ${item.size || ""}`.trim();
+    node.querySelector(".item-name").textContent = `${item.name} ${item.size || ""}`.trim();
+    node.querySelector(".item-mini-stats").textContent = `${item.total_quantity} left - ${item.total_sold || 0} sold`;
     node.querySelector(".quantity").textContent = item.total_quantity;
     node.querySelector(".color").textContent = item.color || "No color added";
     node.querySelector(".size").textContent = item.size || "No size added";
@@ -708,7 +705,21 @@ elements.searchInput.addEventListener("input", (event) => {
 });
 elements.inventoryList.addEventListener("click", (event) => {
   const button = event.target.closest("button[data-action]");
-  if (!button) return;
+  if (!button) {
+    const toggle = event.target.closest(".item-toggle");
+
+    if (toggle) {
+      const item = toggle.closest(".inventory-item");
+      const panel = item.querySelector(".item-panel");
+      const isOpen = !panel.hidden;
+
+      panel.hidden = isOpen;
+      toggle.setAttribute("aria-expanded", String(!isOpen));
+      item.classList.toggle("is-open", !isOpen);
+    }
+
+    return;
+  }
 
   if (button.dataset.action === "delete") {
     deleteSunglasses(button.dataset.id);

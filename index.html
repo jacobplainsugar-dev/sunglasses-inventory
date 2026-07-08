@@ -125,44 +125,50 @@
 
     <template id="inventoryTemplate">
       <article class="inventory-item">
-        <img class="tiny-item-image" alt="" />
-        <div class="item-main">
-          <h3></h3>
-          <dl class="item-details">
-            <div>
-              <dt>Stock left</dt>
-              <dd><strong class="quantity"></strong></dd>
-            </div>
-            <div>
-              <dt>Color</dt>
-              <dd class="color"></dd>
-            </div>
-            <div>
-              <dt>Size</dt>
-              <dd class="size"></dd>
-            </div>
-            <div>
-              <dt>Type</dt>
-              <dd class="audience"></dd>
-            </div>
-            <div>
-              <dt>Total sold</dt>
-              <dd class="total-sold"></dd>
-            </div>
-            <div>
-              <dt>Popularity</dt>
-              <dd class="popularity"></dd>
-            </div>
-          </dl>
+        <button class="item-toggle" type="button" aria-expanded="false">
+          <span class="item-name"></span>
+          <span class="item-mini-stats"></span>
+        </button>
+        <div class="item-panel" hidden>
+          <div class="item-main">
+            <dl class="item-details">
+              <div>
+                <dt>Stock</dt>
+                <dd><strong class="quantity"></strong></dd>
+              </div>
+              <div>
+                <dt>Sold</dt>
+                <dd class="total-sold"></dd>
+              </div>
+              <div>
+                <dt>Color</dt>
+                <dd class="color"></dd>
+              </div>
+              <div>
+                <dt>Size</dt>
+                <dd class="size"></dd>
+              </div>
+              <div>
+                <dt>Type</dt>
+                <dd class="audience"></dd>
+              </div>
+              <div>
+                <dt>Popularity</dt>
+                <dd class="popularity"></dd>
+              </div>
+            </dl>
+          </div>
+          <div class="restock-controls" aria-label="Restock buttons">
+            <button type="button" data-action="restock" data-amount="1">+1</button>
+            <button type="button" data-action="restock" data-amount="5">+5</button>
+            <button type="button" data-action="restock" data-amount="10">+10</button>
+            <button type="button" data-action="restock" data-amount="100">+100</button>
+          </div>
+          <div class="item-actions">
+            <button type="button" class="danger sold-button" data-action="sold" data-amount="1">-1 sold</button>
+            <button type="button" class="delete-button" data-action="delete">Delete</button>
+          </div>
         </div>
-        <div class="restock-controls" aria-label="Restock buttons">
-          <button type="button" data-action="restock" data-amount="1">+1</button>
-          <button type="button" data-action="restock" data-amount="5">+5</button>
-          <button type="button" data-action="restock" data-amount="10">+10</button>
-          <button type="button" data-action="restock" data-amount="100">+100</button>
-        </div>
-        <button type="button" class="danger sold-button" data-action="sold" data-amount="1">-1 sold</button>
-        <button type="button" class="delete-button" data-action="delete">Delete</button>
       </article>
     </template>
 
