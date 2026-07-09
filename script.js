@@ -420,8 +420,40 @@ function renderSalesHistory() {
   });
 }
 
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = src;
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+}
+
+async function loadSupabaseLibrary() {
+  if (window.supabase) return true;
+
+  const fallbackUrls = [
+    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js",
+    "https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js",
+  ];
+
+  for (const url of fallbackUrls) {
+    try {
+      await loadScript(url);
+      if (window.supabase) return true;
+    } catch (error) {
+      // Try the next CDN.
+    }
+  }
+
+  return false;
+}
+
 async function connectSupabase(url, key) {
-  if (!window.supabase) {
+  const supabaseReady = await loadSupabaseLibrary();
+
+  if (!supabaseReady) {
     showLogin("Supabase could not load. Check internet.");
     return;
   }
