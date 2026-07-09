@@ -277,7 +277,11 @@ function renderInventory() {
     node.querySelector(".audience").textContent = item.audience || "Not set";
     node.querySelector(".total-sold").textContent = item.total_sold || 0;
     node.querySelector(".popularity").textContent = getPopularity(item);
-    node.querySelector(".price").textContent = `${item.price_type || "Normal"} - ${formatMoney(getPriceEach(item))}`;
+
+    const price = node.querySelector(".price");
+    if (price) {
+      price.textContent = `${item.price_type || "Normal"} - ${formatMoney(getPriceEach(item))}`;
+    }
 
     if (Number(item.total_quantity || 0) <= 3) {
       node.querySelector(".quantity").textContent = `${item.total_quantity} - Low stock`;
@@ -334,7 +338,9 @@ function renderSalesHistory() {
 
   if (!salesHistory.length) {
     elements.dailySalesTables.innerHTML = '<p class="empty-sales">No sales yet.</p>';
-    elements.showSalesHistoryButton.hidden = true;
+    if (elements.showSalesHistoryButton) {
+      elements.showSalesHistoryButton.hidden = true;
+    }
     return;
   }
 
@@ -353,8 +359,10 @@ function renderSalesHistory() {
   const dayEntries = Object.entries(salesByDay);
   const visibleDayEntries = showAllSalesHistory ? dayEntries : dayEntries.slice(0, 1);
 
-  elements.showSalesHistoryButton.hidden = dayEntries.length <= 1;
-  elements.showSalesHistoryButton.textContent = showAllSalesHistory ? "Hide old tables" : "Show all tables";
+  if (elements.showSalesHistoryButton) {
+    elements.showSalesHistoryButton.hidden = dayEntries.length <= 1;
+    elements.showSalesHistoryButton.textContent = showAllSalesHistory ? "Hide old tables" : "Show all tables";
+  }
 
   visibleDayEntries.forEach(([day, sales]) => {
     const dailyCard = document.createElement("section");
@@ -744,8 +752,8 @@ async function addSunglasses(event) {
     audience: elements.newAudience.value.trim(),
     total_quantity: Number(elements.newQuantity.value),
     total_sold: 0,
-    price_type: elements.newPriceType.value,
-    price_each: getPriceEach({ price_type: elements.newPriceType.value }),
+    price_type: elements.newPriceType ? elements.newPriceType.value : "Normal",
+    price_each: getPriceEach({ price_type: elements.newPriceType ? elements.newPriceType.value : "Normal" }),
     image_url: elements.newImageUrl.value.trim() || null,
   };
 
@@ -777,10 +785,12 @@ elements.addForm.addEventListener("submit", addSunglasses);
 elements.loginForm.addEventListener("submit", logIn);
 elements.logoutButton.addEventListener("click", () => logOut());
 elements.badDayButton.addEventListener("click", toggleBadSalesDay);
-elements.showSalesHistoryButton.addEventListener("click", () => {
-  showAllSalesHistory = !showAllSalesHistory;
-  renderSalesHistory();
-});
+if (elements.showSalesHistoryButton) {
+  elements.showSalesHistoryButton.addEventListener("click", () => {
+    showAllSalesHistory = !showAllSalesHistory;
+    renderSalesHistory();
+  });
+}
 ["click", "keydown", "input", "touchstart"].forEach((eventName) => {
   document.addEventListener(eventName, resetAutoLogoutTimer);
 });
