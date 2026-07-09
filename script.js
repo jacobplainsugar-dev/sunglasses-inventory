@@ -22,6 +22,7 @@ let connected = false;
 let searchTerm = "";
 let autoLogoutTimer = null;
 let showAllSalesHistory = false;
+let connectionPromise = null;
 
 const elements = {
   loginScreen: document.querySelector("#loginScreen"),
@@ -491,8 +492,14 @@ async function logIn(event) {
   event.preventDefault();
 
   if (!client) {
-    showLogin("Supabase is not connected yet.");
-    return;
+    elements.loginStatus.textContent = "Connecting to Supabase...";
+    connectionPromise = connectionPromise || connectSupabase(defaultSupabaseUrl, defaultSupabaseKey);
+    await connectionPromise;
+
+    if (!client) {
+      showLogin("Supabase still is not connected. Refresh the app and try again.");
+      return;
+    }
   }
 
   elements.loginStatus.textContent = "Signing in...";
@@ -808,4 +815,4 @@ elements.inventoryList.addEventListener("click", (event) => {
 });
 
 showLogin("Checking security...");
-connectSupabase(defaultSupabaseUrl, defaultSupabaseKey);
+connectionPromise = connectSupabase(defaultSupabaseUrl, defaultSupabaseKey);
