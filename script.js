@@ -21,6 +21,7 @@ let client = null;
 let connected = false;
 let searchTerm = "";
 let autoLogoutTimer = null;
+let showAllSalesHistory = false;
 
 const elements = {
   loginScreen: document.querySelector("#loginScreen"),
@@ -42,6 +43,7 @@ const elements = {
   inventoryTemplate: document.querySelector("#inventoryTemplate"),
   historyList: document.querySelector("#historyList"),
   dailySalesTables: document.querySelector("#dailySalesTables"),
+  showSalesHistoryButton: document.querySelector("#showSalesHistoryButton"),
   addForm: document.querySelector("#addForm"),
   newName: document.querySelector("#newName"),
   newColor: document.querySelector("#newColor"),
@@ -331,6 +333,7 @@ function renderSalesHistory() {
 
   if (!salesHistory.length) {
     elements.dailySalesTables.innerHTML = '<p class="empty-sales">No sales yet.</p>';
+    elements.showSalesHistoryButton.hidden = true;
     return;
   }
 
@@ -346,7 +349,13 @@ function renderSalesHistory() {
     return groups;
   }, {});
 
-  Object.entries(salesByDay).forEach(([day, sales]) => {
+  const dayEntries = Object.entries(salesByDay);
+  const visibleDayEntries = showAllSalesHistory ? dayEntries : dayEntries.slice(0, 1);
+
+  elements.showSalesHistoryButton.hidden = dayEntries.length <= 1;
+  elements.showSalesHistoryButton.textContent = showAllSalesHistory ? "Hide old tables" : "Show all tables";
+
+  visibleDayEntries.forEach(([day, sales]) => {
     const dailyCard = document.createElement("section");
     dailyCard.className = "daily-sales-card";
 
@@ -729,6 +738,10 @@ elements.addForm.addEventListener("submit", addSunglasses);
 elements.loginForm.addEventListener("submit", logIn);
 elements.logoutButton.addEventListener("click", () => logOut());
 elements.badDayButton.addEventListener("click", toggleBadSalesDay);
+elements.showSalesHistoryButton.addEventListener("click", () => {
+  showAllSalesHistory = !showAllSalesHistory;
+  renderSalesHistory();
+});
 ["click", "keydown", "input", "touchstart"].forEach((eventName) => {
   document.addEventListener(eventName, resetAutoLogoutTimer);
 });
