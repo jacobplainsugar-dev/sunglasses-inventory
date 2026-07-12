@@ -47,6 +47,7 @@ const elements = {
   showSalesHistoryButton: document.querySelector("#showSalesHistoryButton"),
   addForm: document.querySelector("#addForm"),
   newName: document.querySelector("#newName"),
+  newStyleNumber: document.querySelector("#newStyleNumber"),
   newColor: document.querySelector("#newColor"),
   newSize: document.querySelector("#newSize"),
   newAudience: document.querySelector("#newAudience"),
@@ -258,7 +259,7 @@ function renderInventory() {
   elements.inventoryList.innerHTML = "";
 
   const visibleSunglasses = sunglasses.filter((item) =>
-    `${item.name} ${item.color} ${item.size} ${item.audience} ${item.price_type}`.toLowerCase().includes(searchTerm.toLowerCase())
+    `${item.name} ${item.style_number} ${item.color} ${item.size} ${item.audience} ${item.price_type}`.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (!visibleSunglasses.length) {
@@ -273,6 +274,7 @@ function renderInventory() {
     node.querySelector(".item-mini-stats").textContent = `${item.total_quantity} left - ${item.total_sold || 0} sold`;
     node.querySelector(".quantity").textContent = item.total_quantity;
     node.querySelector(".color").textContent = item.color || "No color added";
+    node.querySelector(".style-number").textContent = item.style_number || "No style #";
     node.querySelector(".size").textContent = item.size || "No size added";
     node.querySelector(".audience").textContent = item.audience || "Not set";
     node.querySelector(".total-sold").textContent = item.total_sold || 0;
@@ -747,6 +749,7 @@ async function addSunglasses(event) {
   const item = {
     id: makeId(),
     name: elements.newName.value.trim(),
+    style_number: elements.newStyleNumber.value.trim() || null,
     color: elements.newColor.value.trim(),
     size: elements.newSize.value.trim(),
     audience: elements.newAudience.value.trim(),
