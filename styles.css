@@ -484,19 +484,30 @@ h3 {
 
 .no-sales-list {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 10px;
-  margin-top: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 5px;
+  margin-top: 8px;
+  max-height: 150px;
+  overflow-y: auto;
+  padding-right: 4px;
 }
 
 .no-sales-item {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  gap: 6px;
   border: 1px solid rgba(120, 96, 190, 0.18);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.78);
-  padding: 10px 12px;
+  padding: 5px 7px;
+  font-size: 0.72rem;
+}
+
+.no-sales-item strong,
+.no-sales-item span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .no-sales-item span {
@@ -712,10 +723,10 @@ h3 {
 }
 
 .inventory-list {
-  grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
-  gap: 5px;
+  grid-template-columns: repeat(auto-fill, minmax(105px, 1fr));
+  gap: 4px;
   align-items: start;
-  max-height: 560px;
+  max-height: 440px;
   overflow-y: auto;
   padding-right: 4px;
 }
@@ -742,8 +753,8 @@ h3 {
   gap: 2px;
   align-items: center;
   width: 100%;
-  min-height: 42px;
-  padding: 6px 26px 6px 8px;
+  min-height: 34px;
+  padding: 5px 22px 5px 6px;
   background: rgba(255, 255, 255, 0.72);
   color: var(--ink);
   text-align: left;
@@ -755,7 +766,7 @@ h3 {
 
 .item-name {
   overflow: hidden;
-  font-size: 0.9rem;
+  font-size: 0.78rem;
   font-weight: 900;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -763,7 +774,7 @@ h3 {
 
 .item-mini-stats {
   color: var(--muted);
-  font-size: 0.7rem;
+  font-size: 0.62rem;
   font-weight: 800;
   white-space: nowrap;
 }
@@ -777,9 +788,9 @@ h3 {
   border-radius: 999px;
   background: #fff0a8;
   color: #5d4a00;
-  font-size: 0.68rem;
+  font-size: 0.6rem;
   font-weight: 900;
-  padding: 1px 7px;
+  padding: 1px 5px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
