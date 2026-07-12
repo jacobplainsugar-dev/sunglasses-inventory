@@ -750,7 +750,7 @@ async function addSunglasses(event) {
     id: makeId(),
     name: elements.newName.value.trim(),
     style_number: elements.newStyleNumber.value.trim() || null,
-    color: elements.newColor.value.trim(),
+    color: elements.newColor.value.trim() || null,
     size: elements.newSize.value.trim(),
     audience: elements.newAudience.value.trim(),
     total_quantity: Number(elements.newQuantity.value),

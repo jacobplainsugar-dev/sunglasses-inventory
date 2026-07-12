@@ -98,9 +98,13 @@
           <form id="addForm" class="add-form">
             <input id="newName" required placeholder="Style name" />
             <input id="newStyleNumber" placeholder="Style number" />
-            <input id="newColor" required placeholder="Color" />
+            <input id="newColor" placeholder="Color optional" />
             <input id="newSize" required placeholder="Size, like Med" />
-            <input id="newAudience" required placeholder="Mens or Womens" />
+            <select id="newAudience" required>
+              <option value="Mens">Mens</option>
+              <option value="Womens">Womens</option>
+              <option value="Unisex">Unisex</option>
+            </select>
             <input id="newQuantity" required min="0" type="number" placeholder="Qty" />
             <select id="newPriceType" required>
               <option value="Normal">Normal</option>
