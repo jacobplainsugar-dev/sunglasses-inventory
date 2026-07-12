@@ -484,10 +484,10 @@ h3 {
 
 .no-sales-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 5px;
-  margin-top: 8px;
-  max-height: 150px;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+  max-height: 190px;
   overflow-y: auto;
   padding-right: 4px;
 }
@@ -495,18 +495,21 @@ h3 {
 .no-sales-item {
   display: flex;
   justify-content: space-between;
-  gap: 6px;
+  gap: 10px;
   border: 1px solid rgba(120, 96, 190, 0.18);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.78);
-  padding: 5px 7px;
-  font-size: 0.72rem;
+  padding: 8px 10px;
+  font-size: 0.86rem;
 }
 
-.no-sales-item strong,
+.no-sales-item strong {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 .no-sales-item span {
-  overflow: hidden;
-  text-overflow: ellipsis;
+  flex: 0 0 auto;
   white-space: nowrap;
 }
 
