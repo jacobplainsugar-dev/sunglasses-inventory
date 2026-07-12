@@ -271,6 +271,7 @@ function renderInventory() {
     const node = elements.inventoryTemplate.content.cloneNode(true);
 
     node.querySelector(".item-name").textContent = `${item.name} ${item.size || ""}`.trim();
+    node.querySelector(".item-style-number").textContent = item.style_number ? `Style # ${item.style_number}` : "No style #";
     node.querySelector(".item-mini-stats").textContent = `${item.total_quantity} left - ${item.total_sold || 0} sold`;
     node.querySelector(".quantity").textContent = item.total_quantity;
     node.querySelector(".color").textContent = item.color || "No color added";

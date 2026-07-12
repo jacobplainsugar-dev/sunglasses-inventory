@@ -764,6 +764,22 @@ h3 {
   white-space: nowrap;
 }
 
+.item-style-number {
+  display: inline-block;
+  width: fit-content;
+  max-width: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(58, 169, 153, 0.28);
+  border-radius: 999px;
+  background: #fff0a8;
+  color: #5d4a00;
+  font-size: 0.74rem;
+  font-weight: 900;
+  padding: 2px 8px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .item-panel {
   display: grid;
   gap: 6px;
