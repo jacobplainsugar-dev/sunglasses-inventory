@@ -1,3 +1,5 @@
+import { formatMoney, getDateKey, getPriceEach, makeId } from "./src/helpers.js";
+
 const demoImages = {
   Aviator: "./assets/aviator.png",
   Round: "./assets/round.png",
@@ -87,21 +89,6 @@ function getImage(item) {
   return item.image_url || demoImages[item.name] || "./assets/sunglasses-cover.png";
 }
 
-function makeId() {
-  if (window.crypto && typeof window.crypto.randomUUID === "function") {
-    return window.crypto.randomUUID();
-  }
-
-  return `demo-${Date.now()}-${Math.random().toString(16).slice(2)}`;
-}
-
-function getDateKey(date = new Date()) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
-
 function isBadSalesDay(date) {
   const dateKey = typeof date === "string" ? date : getDateKey(date);
   return badSalesDays.includes(dateKey);
@@ -180,20 +167,6 @@ function getPopularity(item) {
   if (soldThisWeek >= 60) return "Popular";
   if (soldThisWeek >= 25) return "Okay";
   return "Slow";
-}
-
-function getPriceEach(item) {
-  if (Number(item.price_each || 0) > 0) {
-    return Number(item.price_each);
-  }
-
-  if (item.price_type === "Vintage") return 35;
-  if (item.price_type === "Polarized") return 25;
-  return 20;
-}
-
-function formatMoney(amount) {
-  return `$${Number(amount || 0).toFixed(2)}`;
 }
 
 function renderLowStock() {
