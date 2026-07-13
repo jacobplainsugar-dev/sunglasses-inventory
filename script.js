@@ -1,4 +1,5 @@
 import { formatMoney, getDateKey, getPriceEach, makeId } from "./src/helpers.js";
+import { createInventoryClient, defaultSupabaseKey, defaultSupabaseUrl } from "./src/supabase.js";
 
 const demoImages = {
   Aviator: "./assets/aviator.png",
@@ -7,8 +8,6 @@ const demoImages = {
   Square: "./assets/square.png",
 };
 
-const defaultSupabaseUrl = "https://ruqkfurdtwflkrworyhn.supabase.co";
-const defaultSupabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ1cWtmdXJkdHdmbGtyd29yeWhuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE4MTg5NDgsImV4cCI6MjA5NzM5NDk0OH0.XxvKG3VHEljes46eWdlLLtAaZrffL-9FGWhQF0Ur7dU";
 const autoLogoutMs = 5 * 60 * 1000;
 
 let sunglasses = [];
@@ -405,50 +404,15 @@ function renderSalesHistory() {
   });
 }
 
-function loadScript(src) {
-  return new Promise((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = src;
-    script.onload = resolve;
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
-}
-
-async function loadSupabaseLibrary() {
-  if (window.supabase) return true;
-
-  const fallbackUrls = [
-    "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js",
-    "https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js",
-  ];
-
-  for (const url of fallbackUrls) {
-    try {
-      await loadScript(url);
-      if (window.supabase) return true;
-    } catch (error) {
-      // Try the next CDN.
-    }
-  }
-
-  return false;
-}
-
 async function connectSupabase(url, key) {
-  const supabaseReady = await loadSupabaseLibrary();
-
-  if (!supabaseReady) {
-    showLogin("Supabase could not load. Check internet.");
-    return;
-  }
-
   try {
-    client = window.supabase.createClient(url, key, {
-      auth: {
-        persistSession: false,
-      },
-    });
+    client = await createInventoryClient(url, key);
+
+    if (!client) {
+      showLogin("Supabase could not load. Check internet.");
+      return;
+    }
+
     connected = true;
     elements.loginStatus.textContent = "Checking login...";
 
