@@ -1,0 +1,76 @@
+﻿  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.inventory-item {
+  gap: 0;
+}
+
+.inventory-item::before {
+  display: none;
+}
+
+.inventory-item::after {
+  content: "Ã¢ËœÂº";
+  top: 8px;
+  right: 9px;
+  bottom: auto;
+  font-size: 1rem;
+  letter-spacing: 0;
+}
+
+.item-toggle {
+  display: grid;
+  gap: 2px;
+  align-items: center;
+  width: 100%;
+  min-height: 34px;
+  padding: 5px 22px 5px 6px;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--ink);
+  text-align: left;
+}
+
+.item-toggle:hover {
+  background: #e6fbf7;
+}
+
+.item-name {
+  overflow: hidden;
+  font-size: 0.78rem;
+  font-weight: 900;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item-mini-stats {
+  color: var(--muted);
+  font-size: 0.62rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.item-style-number {
+  display: inline-block;
+  width: fit-content;
+  max-width: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(58, 169, 153, 0.28);
+  border-radius: 999px;
+  background: #fff0a8;
+  color: #5d4a00;
+  font-size: 0.6rem;
+  font-weight: 900;
+  padding: 1px 5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item-panel {
+  display: grid;
+  gap: 6px;
+  padding: 0 10px 10px;
+}
+
+.item-main {
+  padding: 0;

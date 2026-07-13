@@ -1,0 +1,30 @@
+﻿
+.item-details {
+  grid-template-columns: repeat(auto-fit, minmax(84px, 1fr));
+  gap: 5px;
+  margin: 0;
+}
+
+.item-details div {
+  padding: 5px 7px;
+}
+
+.item-details dt {
+  margin-bottom: 0.15rem;
+  font-size: 0.66rem;
+}
+
+.restock-controls {
+  gap: 5px;
+  padding: 0;
+}
+
+.restock-controls button,
+.sold-button,
+.delete-button {
+  padding: 0.4rem 0.2rem;
+  font-size: 0.82rem;
+}
+
+.item-actions {
+  display: grid;

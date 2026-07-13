@@ -1,0 +1,25 @@
+﻿:root {
+  color-scheme: light;
+  --bg: #fff7df;
+  --panel: #ffffff;
+  --ink: #24303b;
+  --muted: #6c7380;
+  --line: #f4dfcc;
+  --accent: #62c7b8;
+  --accent-dark: #3aa999;
+  --danger: #ff7f86;
+  --danger-dark: #e8636d;
+  --soft: #e6fbf7;
+  --peach: #ffe4d1;
+  --sky: #dff1ff;
+  --sun: #fff0a8;
+  --blush: #ffd8e8;
+  --lilac: #eadcff;
+  --leaf: #c9f2da;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {

@@ -1,0 +1,136 @@
+﻿.topbar::before {
+  content: "âœ¿ â€ â˜º â™¡ âœ¦ â—‰-â—‰ â˜º âœ¿ â€";
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  color: rgba(224, 103, 143, 0.28);
+  font-size: 1.25rem;
+  letter-spacing: 0.25rem;
+}
+
+.topbar::after {
+  content: "cute stock day  â˜º  â—‰-â—‰  âœ¿  âœ¦  â˜º";
+  position: absolute;
+  left: 20px;
+  bottom: 10px;
+  color: rgba(58, 169, 153, 0.45);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.topbar h2 {
+  margin-bottom: 0;
+  font-size: clamp(1.6rem, 3vw, 2.5rem);
+}
+
+.logout-button {
+  align-self: end;
+  background: #ffc9de;
+  color: #5c2438;
+}
+
+.low-stock-card {
+  position: relative;
+  overflow: hidden;
+  padding: 14px;
+  background:
+    radial-gradient(circle at 96% 14%, rgba(255, 216, 232, 0.9) 0 12%, transparent 13%),
+    linear-gradient(135deg, #fff, #fff0a8 48%, #ffeef5);
+}
+
+.low-stock-card::after {
+  content: "Low stock";
+  position: absolute;
+  right: 16px;
+  top: 14px;
+  color: rgba(232, 99, 109, 0.22);
+  font-size: 2rem;
+  font-weight: 900;
+  transform: rotate(8deg);
+}
+
+.low-stock-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.low-stock-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid rgba(232, 99, 109, 0.18);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.78);
+  padding: 10px 12px;
+}
+
+.low-stock-item span {
+  color: var(--danger-dark);
+  font-weight: 900;
+}
+
+.no-sales-card {
+  position: relative;
+  overflow: hidden;
+  padding: 14px;
+  background:
+    radial-gradient(circle at 96% 14%, rgba(234, 220, 255, 0.9) 0 12%, transparent 13%),
+    linear-gradient(135deg, #fff, #eadcff 42%, #dff1ff);
+}
+
+.no-sales-card::after {
+  content: "No sales";
+  position: absolute;
+  right: 16px;
+  top: 14px;
+  color: rgba(120, 96, 190, 0.2);
+  font-size: 2rem;
+  font-weight: 900;
+  transform: rotate(8deg);
+}
+
+.no-sales-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+  max-height: 190px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.no-sales-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid rgba(120, 96, 190, 0.18);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.78);
+  padding: 8px 10px;
+  font-size: 0.86rem;
+}
+
+.no-sales-item strong {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.no-sales-item span {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.no-sales-item span {
+  color: #7860be;
+  font-weight: 900;
+}
+
+.add-card,
+.inventory-section,
+.sales-history-card,
+.history-card,
+.connect-card {

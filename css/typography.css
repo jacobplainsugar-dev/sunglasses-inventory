@@ -1,0 +1,36 @@
+﻿  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0;
+  font-size: 2.2rem;
+  font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+  font-weight: 900;
+  line-height: 1;
+}
+
+h2 {
+  margin-bottom: 0.4rem;
+  font-size: 1.35rem;
+  font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+  font-weight: 900;
+}
+
+h3 {
+  font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+  font-weight: 900;
+}
+
+.eyebrow {
+  margin-bottom: 0.45rem;
+  color: #e98276;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dashboard-shell {
+  position: relative;
+  z-index: 1;
+  display: grid;
