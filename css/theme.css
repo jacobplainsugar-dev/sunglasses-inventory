@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   color-scheme: light;
   --bg: #fff7df;
   --panel: #ffffff;
@@ -23,3 +23,16 @@
 }
 
 [hidden] {
+  display: none !important;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 12% 10%, var(--sky) 0, transparent 28%),
+    radial-gradient(circle at 88% 8%, var(--blush) 0, transparent 26%),
+    radial-gradient(circle at 55% 105%, var(--leaf) 0, transparent 30%),
+    var(--bg);
+  color: var(--ink);
+  font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+}

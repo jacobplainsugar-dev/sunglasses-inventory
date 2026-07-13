@@ -1,76 +1,64 @@
-﻿  overflow-y: auto;
-  padding-right: 4px;
-}
-
-.inventory-item {
-  gap: 0;
-}
-
-.inventory-item::before {
-  display: none;
-}
-
-.inventory-item::after {
-  content: "Ã¢ËœÂº";
-  top: 8px;
-  right: 9px;
-  bottom: auto;
-  font-size: 1rem;
-  letter-spacing: 0;
-}
-
-.item-toggle {
+.daily-sales-tables {
   display: grid;
-  gap: 2px;
-  align-items: center;
-  width: 100%;
-  min-height: 34px;
-  padding: 5px 22px 5px 6px;
+  gap: 14px;
+}
+
+.daily-sales-card {
+  border: 1px solid rgba(244, 223, 204, 0.95);
+  border-radius: 8px;
   background: rgba(255, 255, 255, 0.72);
-  color: var(--ink);
+  padding: 12px;
+}
+
+.daily-sales-card h3 {
+  margin-bottom: 10px;
+  color: #5c2438;
+}
+
+.show-history-button {
+  width: 100%;
+  margin-top: 12px;
+  background: #ffc9de;
+  color: #5c2438;
+}
+
+.empty-sales {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.sales-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.sales-table {
+  width: 100%;
+  min-width: 420px;
+  border-collapse: collapse;
+}
+
+.sales-table th,
+.sales-table td {
+  padding: 12px 14px;
   text-align: left;
 }
 
-.item-toggle:hover {
-  background: #e6fbf7;
-}
-
-.item-name {
-  overflow: hidden;
+.sales-table th {
+  background: var(--sun);
+  color: #66551a;
   font-size: 0.78rem;
-  font-weight: 900;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  text-transform: uppercase;
 }
 
-.item-mini-stats {
-  color: var(--muted);
-  font-size: 0.62rem;
-  font-weight: 800;
-  white-space: nowrap;
+.sales-table tr:nth-child(even) td {
+  background: rgba(230, 251, 247, 0.65);
 }
 
-.item-style-number {
-  display: inline-block;
-  width: fit-content;
-  max-width: 100%;
-  overflow: hidden;
-  border: 1px solid rgba(58, 169, 153, 0.28);
-  border-radius: 999px;
-  background: #fff0a8;
-  color: #5d4a00;
-  font-size: 0.6rem;
-  font-weight: 900;
-  padding: 1px 5px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.sales-table td {
+  border-top: 1px solid var(--line);
+  font-weight: 700;
 }
-
-.item-panel {
-  display: grid;
-  gap: 6px;
-  padding: 0 10px 10px;
-}
-
-.item-main {
-  padding: 0;

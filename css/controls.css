@@ -1,4 +1,11 @@
-﻿  border: 0;
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  border: 0;
   border-radius: 8px;
   background: var(--accent);
   color: #143d39;
@@ -42,18 +49,3 @@ label {
   color: var(--muted);
   font-size: 0.9rem;
 }
-
-.login-screen {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  min-height: 100vh;
-  place-items: center;
-  padding: 20px;
-}
-
-.login-card {
-  position: relative;
-  display: grid;
-  gap: 16px;
-  width: min(100%, 430px);

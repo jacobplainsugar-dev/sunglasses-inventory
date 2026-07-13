@@ -1,4 +1,9 @@
-﻿  gap: 14px;
+.dashboard-shell {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 14px;
   min-height: 100vh;
   padding: 14px;
 }
@@ -12,20 +17,9 @@
 .brand-block {
   position: relative;
   overflow: hidden;
-  border-radius: 8px;
-  background:
-    radial-gradient(circle at 88% 88%, rgba(255, 216, 232, 0.95) 0 13%, transparent 14%),
-    linear-gradient(180deg, #ffffff, #fff2cc);
   border: 1px solid var(--line);
-}
-
-.brand-block::after {
-  content: "âœ¿ â˜º â™¡ â€ âœ¦ â—‰-â—‰ â˜º âœ¿";
-  position: absolute;
-  right: 14px;
-  bottom: 12px;
-  color: rgba(224, 103, 143, 0.45);
-  font-size: 2.1rem;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #ffffff, #fff2cc);
 }
 
 .brand-block img {
@@ -45,61 +39,23 @@
   align-content: start;
 }
 
-.topbar,
-.bad-day-card,
-.low-stock-card,
-.no-sales-card,
-.add-card,
-.inventory-section,
-.sales-history-card,
-.history-card,
-.connect-card {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: var(--panel);
-  box-shadow: 0 14px 34px rgba(118, 88, 52, 0.08);
-}
-
 .topbar {
   position: relative;
-  overflow: hidden;
   display: grid;
   grid-template-columns: minmax(220px, 1fr) auto minmax(240px, 420px);
   gap: 12px;
   align-items: end;
   padding: 14px;
-  background:
-    radial-gradient(circle at 94% 18%, rgba(255, 216, 232, 0.85) 0 10%, transparent 11%),
-    radial-gradient(circle at 80% 82%, rgba(234, 220, 255, 0.9) 0 12%, transparent 13%),
-    linear-gradient(135deg, #ffffff, #e6fbf7 52%, #fff0a8);
+  background: linear-gradient(135deg, #ffffff, var(--soft) 52%, var(--sun));
 }
 
-.bad-day-card {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 12px;
-  align-items: center;
-  padding: 14px;
-  background:
-    radial-gradient(circle at 96% 16%, rgba(223, 241, 255, 0.9) 0 12%, transparent 13%),
-    linear-gradient(135deg, #ffffff, #e6fbf7 45%, #ffeef5);
-}
-
-.bad-day-card h2 {
-  margin-bottom: 0.3rem;
-}
-
-.bad-day-card p:last-child {
+.topbar h2 {
   margin-bottom: 0;
-  color: var(--muted);
-  font-weight: 800;
+  font-size: clamp(1.6rem, 3vw, 2.5rem);
 }
 
-.bad-day-card button {
-  background: #b9e7ff;
-  color: #1d4a63;
-}
-
-.bad-day-card button:hover {
-  background: #8ed7ff;
+.logout-button {
+  align-self: end;
+  background: #ffc9de;
+  color: #5c2438;
 }

@@ -1,42 +1,25 @@
-﻿}
-
-body {
-  margin: 0;
-  background:
-    radial-gradient(circle at 12% 10%, #dff1ff 0, transparent 28%),
-    radial-gradient(circle at 88% 8%, #ffd8e8 0, transparent 26%),
-    radial-gradient(circle at 55% 105%, #c9f2da 0, transparent 30%),
-    radial-gradient(circle at 8% 72%, rgba(255, 240, 168, 0.75) 0, transparent 20%),
-    radial-gradient(circle at 92% 64%, rgba(234, 220, 255, 0.75) 0, transparent 22%),
-    radial-gradient(circle at 35% 35%, rgba(255, 216, 232, 0.48) 0, transparent 18%),
-    radial-gradient(circle at 68% 42%, rgba(223, 241, 255, 0.7) 0, transparent 16%),
-    var(--bg);
-  color: var(--ink);
-  font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
-}
-
 body::before,
 body::after {
   position: fixed;
   z-index: 0;
   pointer-events: none;
-  color: rgba(224, 103, 143, 0.22);
-  font-size: 8rem;
+  color: rgba(224, 103, 143, 0.18);
+  font-size: 6rem;
   line-height: 1;
 }
 
 body::before {
-  content: "âœ¿ â€ â˜º âœ¦ âœ¿ â˜º â—‰-â—‰";
+  content: "flowers smiles sunglasses";
   top: 18px;
   right: 28px;
-  transform: rotate(16deg);
+  transform: rotate(14deg);
 }
 
 body::after {
-  content: "â™¡ âœ¿ âœ¦ â˜º â€ â—‰-â—‰ â˜º";
+  content: "cute stock day";
   bottom: 22px;
   left: 28px;
-  transform: rotate(-14deg);
+  transform: rotate(-12deg);
 }
 
 .cute-scatter {
@@ -49,7 +32,7 @@ body::after {
 
 .cute-scatter span {
   position: absolute;
-  color: rgba(224, 103, 143, 0.26);
+  color: rgba(224, 103, 143, 0.24);
   font-weight: 900;
   line-height: 1;
   text-shadow: 0 4px 14px rgba(255, 255, 255, 0.8);
@@ -61,10 +44,6 @@ body::after {
 
 .cute-scatter span:nth-child(4n) {
   color: rgba(120, 96, 190, 0.22);
-}
-
-.cute-scatter span:nth-child(5n) {
-  color: rgba(214, 155, 0, 0.24);
 }
 
 .cute-scatter span:nth-child(1) { top: 4%; left: 5%; font-size: 2.6rem; transform: rotate(-18deg); }
@@ -97,10 +76,3 @@ body::after {
 .cute-scatter span:nth-child(28) { top: 88%; left: 72%; font-size: 2.7rem; transform: rotate(18deg); }
 .cute-scatter span:nth-child(29) { top: 83%; left: 90%; font-size: 2.3rem; transform: rotate(-18deg); }
 .cute-scatter span:nth-child(30) { top: 58%; left: 88%; font-size: 2.5rem; transform: rotate(8deg); }
-
-button,
-input,
-select {
-  font: inherit;
-}
-

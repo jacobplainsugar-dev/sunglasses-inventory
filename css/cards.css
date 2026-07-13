@@ -1,54 +1,54 @@
-﻿.topbar::before {
-  content: "âœ¿ â€ â˜º â™¡ âœ¦ â—‰-â—‰ â˜º âœ¿ â€";
-  position: absolute;
-  top: 12px;
-  right: 18px;
-  color: rgba(224, 103, 143, 0.28);
-  font-size: 1.25rem;
-  letter-spacing: 0.25rem;
+.topbar,
+.bad-day-card,
+.low-stock-card,
+.no-sales-card,
+.add-card,
+.inventory-section,
+.sales-history-card,
+.history-card,
+.connect-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: 0 14px 34px rgba(118, 88, 52, 0.08);
 }
 
-.topbar::after {
-  content: "cute stock day  â˜º  â—‰-â—‰  âœ¿  âœ¦  â˜º";
-  position: absolute;
-  left: 20px;
-  bottom: 10px;
-  color: rgba(58, 169, 153, 0.45);
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+.bad-day-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 14px;
+  background: linear-gradient(135deg, #ffffff, var(--soft) 45%, #ffeef5);
 }
 
-.topbar h2 {
+.bad-day-card h2 {
+  margin-bottom: 0.3rem;
+}
+
+.bad-day-card p:last-child {
   margin-bottom: 0;
-  font-size: clamp(1.6rem, 3vw, 2.5rem);
+  color: var(--muted);
+  font-weight: 800;
 }
 
-.logout-button {
-  align-self: end;
-  background: #ffc9de;
-  color: #5c2438;
+.bad-day-card button {
+  background: #b9e7ff;
+  color: #1d4a63;
+}
+
+.low-stock-card,
+.no-sales-card,
+.add-card,
+.inventory-section,
+.sales-history-card,
+.history-card,
+.connect-card {
+  padding: 14px;
 }
 
 .low-stock-card {
-  position: relative;
-  overflow: hidden;
-  padding: 14px;
-  background:
-    radial-gradient(circle at 96% 14%, rgba(255, 216, 232, 0.9) 0 12%, transparent 13%),
-    linear-gradient(135deg, #fff, #fff0a8 48%, #ffeef5);
-}
-
-.low-stock-card::after {
-  content: "Low stock";
-  position: absolute;
-  right: 16px;
-  top: 14px;
-  color: rgba(232, 99, 109, 0.22);
-  font-size: 2rem;
-  font-weight: 900;
-  transform: rotate(8deg);
+  background: linear-gradient(135deg, #fff, var(--sun) 48%, #ffeef5);
 }
 
 .low-stock-list {
@@ -74,23 +74,7 @@
 }
 
 .no-sales-card {
-  position: relative;
-  overflow: hidden;
-  padding: 14px;
-  background:
-    radial-gradient(circle at 96% 14%, rgba(234, 220, 255, 0.9) 0 12%, transparent 13%),
-    linear-gradient(135deg, #fff, #eadcff 42%, #dff1ff);
-}
-
-.no-sales-card::after {
-  content: "No sales";
-  position: absolute;
-  right: 16px;
-  top: 14px;
-  color: rgba(120, 96, 190, 0.2);
-  font-size: 2rem;
-  font-weight: 900;
-  transform: rotate(8deg);
+  background: linear-gradient(135deg, #fff, var(--lilac) 42%, var(--sky));
 }
 
 .no-sales-list {
@@ -114,23 +98,33 @@
   font-size: 0.86rem;
 }
 
-.no-sales-item strong {
-  white-space: normal;
-  overflow-wrap: anywhere;
+.add-card {
+  background: linear-gradient(135deg, #ffffff, var(--peach));
 }
 
-.no-sales-item span {
-  flex: 0 0 auto;
-  white-space: nowrap;
-}
-
-.no-sales-item span {
-  color: #7860be;
-  font-weight: 900;
-}
-
-.add-card,
-.inventory-section,
-.sales-history-card,
-.history-card,
 .connect-card {
+  background: linear-gradient(135deg, #ffffff, #e9e3ff);
+}
+
+.sales-history-card {
+  background: linear-gradient(135deg, #ffffff, #ffeef5);
+}
+
+.connect-card p {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.add-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+}
+
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 14px;
+}
